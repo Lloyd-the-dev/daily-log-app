@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily logging | 2023</title>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+    <h1 class="heading">Daily Log</h1>
+     <div class="container">
+        <div class="card">
+            <div class="inner-box" id="card">
+                <div class="card-front">
+                    <h2>LOGIN</h2>
+                    <form method="POST" action="login.php">
+                        <input type="email" placeholder="Your email" required class="input-box" name="email">
+                        <input type="password" placeholder="Your Password" required class="input-box" name="password">
+                        <button type="submit" class="submit-btn" name="submit">Submit</button>
+                        <input type="checkbox"><span>Remember Me</span>	
+                    </form>
+                    <button type="button" class="btn" onclick="openRegister()">I'm new here</button>    
+                </div>
+                <div class="card-back">
+                    <h2>CREATE ACCOUNT</h2>
+                    <form method="POST" action="form.php">
+                        <input type="text" placeholder="Your Name" required class="input-box" name="fullName">
+                        <input type="email" placeholder="Your email" required class="input-box" name="email">
+                        <input type="password" placeholder="Your Password" required class="input-box" name="password">
+                        <button type="submit" class="submit-btn" name="submit">Submit</button>
+                        <input type="checkbox"><span>Remember Me</span>
+                    </form>
+                    <button type="button" class="btn" onclick="openLogin()">I have an account</button>
+                </div>
+
+            </div>
+        </div>
+     </div>
+     
+     <script src="./index.js"></script>
+</body>
+</html>
