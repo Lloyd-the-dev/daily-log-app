@@ -12,6 +12,7 @@
    $sql = "INSERT INTO `user_details` (`user_id`, `Fullname`, `Email`, `Password`) VALUES ('0', '$fullName', '$email', '$password')";
 
    $rs = mysqli_query($con, $sql);
+
    if($rs)
    {
      echo "Contact Records inserted";
