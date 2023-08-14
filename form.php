@@ -9,13 +9,14 @@
 
    $con = mysqli_connect("localhost","root","oreoluwa2003","daily_logging");
 
-   $sql = "INSERT INTO `user_details` (`user_id`, `Fullname`, `Email`, `Password`) VALUES ('0', '$fullName', '$email', '$password')";
+   $sql = "INSERT INTO `user_details` (`user_id`, `Fullname`, `Email`, `Password`, `is_admin`) VALUES ('0', '$fullName', '$email', '$password', '0')";
 
    $rs = mysqli_query($con, $sql);
 
    if($rs)
    {
      echo "Contact Records inserted";
+     header("Location: index.html");
    }
 
    mysqli_close($con);

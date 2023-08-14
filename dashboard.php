@@ -4,6 +4,7 @@
             header("Location: login.html");
             exit();
         }
+
 ?>
 
 <!DOCTYPE html>
@@ -35,18 +36,26 @@
             <i class='bx bx-laptop'></i>
             <a href="#projects"  style="--i: 1" class="nav-item-title">Projects</a>
         </div>
-        <div class="nav-item">
-            <i class='bx bxs-report'></i>
-            <a href="" style="--i: 4" class="nav-item-title">Report</a>
-        </div>
+        <?php if ($_SESSION["admin"] == 1) { ?>
+            <div class="nav-item">
+                <i class='bx bxs-report'></i>
+                <a href="" style="--i: 4" class="nav-item-title">Report</a>
+            </div>
+        <?php } ?>
+
         <div class="nav-item">
             <i class='bx bx-log-out'></i>
             <a href="logout.php" class="nav-item-title" style="--i: 4">Logout</a>
         </div>
       </nav>
     </header>
-    <h1 class="welcome-message">Welcome, <?php echo $_SESSION["name"]; ?></h1>
+    <h1 class="welcome-message">Welcome, <?php echo $_SESSION["name"]; ?>
+     <?php 
+            $message = ($_SESSION["admin"] == 1) ? "(admin)" : "";
+            echo $message; 
+        ?></h1>
 
+ 
     <section id="projects">
         <form action="dashboard.php" class="container" method="POST">
             <h2 class="project-heading">What Project Did you work on Today?</h2>
@@ -122,7 +131,7 @@
             <label for="remarks">Remarks:</label>
             <textarea id="remarks" name="remarks" rows="4" style="max-width: 360px; max-height: 100px" name="remarks"></textarea>
             
-            <button name="submit" id="generate-sheet">Submit</button>
+            <button name="submit">Submit</button>
         </form>
     </section>
 
@@ -161,3 +170,5 @@
 
   mysqli_close($con);
 ?>
+
+
