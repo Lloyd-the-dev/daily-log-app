@@ -1,6 +1,6 @@
 <?php 
 
-    $con = mysqli_connect("localhost","root","","daily_logging");
+    $con = mysqli_connect("localhost","root","oreoluwa2003","daily_logging");
    
     $email = $_POST["email"];
     $password = $_POST["password"];

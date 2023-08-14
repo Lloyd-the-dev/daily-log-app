@@ -48,87 +48,116 @@
     <h1 class="welcome-message">Welcome, <?php echo $_SESSION["name"]; ?></h1>
 
     <section id="projects">
-        <h1 class="project-heading">What Project(s) Did you work on Today?</h1>
-        <form action="" class="pro-form">
-            <label for="">Projects</label>
-            <div class="project-dropdown">
-                <select>
+        <form action="dashboard.php" class="container" method="POST">
+            <h2 class="project-heading">What Project Did you work on Today?</h2>
+
+            <label for="project">Projects</label>
+            <select id="project" name="project" readonly>
                     <option value="0">Select Project:</option>
-                    <option value="1">Ibile-Hub</option>
-                    <option value="2">RevBill</option>
-                    <option value="3">LASEPA</option>
-                    <option value="4">HMS</option>
-                    <option value="5">Telemedicine-HMS</option>
-                    <option value="6">Smaptaal</option>
-                    <option value="7">RevPay</option>
-                    <option value="8">Business-License</option>
-                    <option value="9">Bank-Assessment</option>
-                    <option value="10">TechPay-Web</option>
-                    <option value="11">HR</option>
-                    <option value="12">LRP</option>
-                    <option value="13">LRP-Admin</option>
-                    <option value="14">TechPay-Mobile</option>
-                    <option value="15">E-Settlement</option>
-                    <option value="16">LSSB</option>
-                    <option value="17">LASPA</option>
-                    <option value="18">LASEMA</option>
-                </select>
-            </div>
-
-            <label for="">Activity/Task</label>
-            <textarea name="" id="" cols="30" rows="10" class="activity"></textarea>
-
-            <label for="" class="client">ClientType</label>
-            <div class="project-dropdown">
-                <select width="500px">
-                    <option value="0">Select Client type:</option>
-                    <option value="1">Login-Access</option>
-                    <option value="2">LSJ</option>
-                    <option value="3">RevBill</option>
-                    <option value="4">LASEPA</option>
-                    <option value="5">ACDS</option>
-                    <option value="6">3rd-Party</option>
-                    <option value="7">LIRS</option>
-                    <option value="8">Other-Agency</option>
-                    <option value="9">Bank</option>
-                    <option value="10">ABC-Helpdesk</option>
-                    <option value="11">IBILE</option>
-                    <option value="12">CBS</option>
-                    <option value="13">Tax-Payer</option>
-                    <option value="14">ABC-Others</option>
-                </select>
-            </div>
-
-            <label for="">Reference/ID</label>
-            <input type="text">
-
-            <input type="date">
-            <!-- time area -->
-            <div class="time">
-                <div class="time-item">
-                    <label for="">Start Time</label>
-                    <input type="time">
-                </div>
-                <div class="time-item">
-                    <label for="">End TIme</label>
-                    <input type="time">
-                </div>
-            </div> <!--end of time area -->
-            <p id="totalHours"></p>
-
-            <label for="">Status</label>
-            <select>
-                <option value="1">Pending</option>
-                <option value="1">Work in Progress</option>
-                <option value="1">Resolved</option>
-                <option value="1">Completed</option>
+                    <option value="Ibile-Hub">Ibile-Hub</option>
+                    <option value="RevBill">RevBill</option>
+                    <option value="LASEPA">LASEPA</option>
+                    <option value="HMS">HMS</option>
+                    <option value="Telemedicine-HMS">Telemedicine-HMS</option>
+                    <option value="Smaptaal">Smaptaal</option>
+                    <option value="RevPay">RevPay</option>
+                    <option value="Business-License">Business-License</option>
+                    <option value="Bank-Assessment">Bank-Assessment</option>
+                    <option value="TechPay-Web">TechPay-Web</option>
+                    <option value="HR">HR</option>
+                    <option value="LRP">LRP</option>
+                    <option value="LRP-Admin">LRP-Admin</option>
+                    <option value="TechPay-Mobile">TechPay-Mobile</option>
+                    <option value="E-Settlement">E-Settlement</option>
+                    <option value="LSSB">LSSB</option>
+                    <option value="LASPA">LASPA</option>
+                    <option value="LASEMA">LASEMA</option>
             </select>
 
-            <label for="">Remarks</label>
-            <input type="text">
+            <label for="message">Activity/Task</label>
+            <textarea id="message" rows="4" class="activity" style="max-width: 360px; max-height: 100px" name="task"></textarea>
+
+            <label for="client" class="client">ClientType</label>
+            <select width="500px" id="client" name="client" readonly>
+                    <option value="0">Select Client type:</option>
+                    <option value="Login-Access">Login-Access</option>
+                    <option value="LSJ">LSJ</option>
+                    <option value="RevBill">RevBill</option>
+                    <option value="LASEPA">LASEPA</option>
+                    <option value="ACDS">ACDS</option>
+                    <option value="3rd-Party">3rd-Party</option>
+                    <option value="LIRS">LIRS</option>
+                    <option value="Other-Agency">Other-Agency</option>
+                    <option value="Bank">Bank</option>
+                    <option value="ABC-Helpdesk">ABC-Helpdesk</option>
+                    <option value="IBILE">IBILE</option>
+                    <option value="CBS">CBS</option>
+                    <option value="Tax-Payer">Tax-Payer</option>
+                    <option value="ABC-Others">ABC-Others</option>
+            </select>
+
+            <label for="reference">Reference/ID:</label>
+            <input type="text" id="reference" required name="reference">
+
+            <label for="date">Date:</label>
+            <input type="date" id="date" name="date" required>
+
+            <label for="start-time">Start Time:</label>
+            <input type="time" id="start-time" name="start-time" required>
+
+            <label for="end-time">End Time:</label>
+            <input type="time" id="end-time" name="end-time" required>
+
+            <p>Total Hours Spent: <span id="total-hours-display">0</span> hours</p>
+            <input type="hidden" id="total-hours" name="total-hours" value="0">
+
+            <label for="status">Status</label>
+            <select id="status" name="status">
+                <option value="Pending">Pending</option>
+                <option value="Work in Progress">Work in Progress</option>
+                <option value="Resolved">Resolved</option>
+                <option value="Completed">Completed</option>
+            </select>
+
+            <label for="remarks">Remarks:</label>
+            <textarea id="remarks" name="remarks" rows="4" style="max-width: 360px; max-height: 100px" name="remarks"></textarea>
+            
+            <button name="submit" id="generate-sheet">Submit</button>
         </form>
-       
     </section>
+
+
     <script src="index.js"></script>
 </body>
 </html>
+
+<?php
+   if(isset($_POST['submit']))
+   {
+       $project = $_POST["project"];
+       $activityTask = $_POST["task"];
+       $client = $_POST["client"];
+       $reference = $_POST["reference"];
+       $date = $_POST["date"];
+       $startTime = $_POST["start-time"];
+       $endTime = $_POST["end-time"];
+       $totalHours = $_POST["total-hours"];
+       $status = $_POST["status"];
+       $remarks = $_POST["remarks"];
+   }
+
+  $con = mysqli_connect("localhost","root","oreoluwa2003","daily_logging");
+
+  $sql = "INSERT INTO `project_details` (`project_id`, `project`, `Activity/Task`, `ClientType`, `Reference/ID`, `Date`, `StartTime`, `EndTime`, `TotalHours`, `Status`, `Remarks`) VALUES ('0', '$project', '$activityTask', '$client', '$reference', '$date', '$startTime', '$endTime', '$totalHours', '$status', '$remarks')";
+
+  $rs = mysqli_query($con, $sql);
+
+  if($rs)
+  {
+    echo '<script type ="text/JavaScript">'; 
+    echo 'alert("Activity successfully added!")';
+    echo '</script>';  
+  }
+
+  mysqli_close($con);
+?>
