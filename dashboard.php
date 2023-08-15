@@ -15,6 +15,16 @@
     <title>User Dashboard</title>
     <link rel="stylesheet" href="./css/dashboard.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    
+    <style>
+        body {
+            min-height: 100vh;
+            background: url(https://github.com/ecemgo/mini-samples-great-tricks/assets/13468728/844a2e12-df15-4697-b172-3e05db4d3413) no-repeat;
+            background-size: cover;
+            background-position: center;
+            color: #fff;
+        }
+    </style>
 </head>
 <body>
     <!--NavBar -->
@@ -32,20 +42,28 @@
             <i class='bx bx-home-circle'></i>
             <a href="dashboard.php" style="--i: 0" class="nav-item-title">Home</a>
         </div>
-        <div class="nav-item">
-            <i class='bx bx-laptop'></i>
-            <a href="#projects"  style="--i: 1" class="nav-item-title">Projects</a>
-        </div>
         <?php if ($_SESSION["admin"] == 1) { ?>
             <div class="nav-item">
-                <i class='bx bxs-report'></i>
-                <a href="" style="--i: 4" class="nav-item-title">Report</a>
+            <i class='bx bxs-edit-alt'></i>
+            <a href="adminDashboard.html"  style="--i: 1" class="nav-item-title">Logs</a>
+        </div>
+        <?php } else{ ?>
+            <div class="nav-item">
+                <i class='bx bx-laptop'></i>
+                <a href="#projects"  style="--i: 1" class="nav-item-title">Projects</a>
             </div>
         <?php } ?>
-
+        <div class="nav-item">
+                <i class='bx bxs-report'></i>
+                <a href="" style="--i: 4" class="nav-item-title">Report</a>
+        </div>
         <div class="nav-item">
             <i class='bx bx-log-out'></i>
             <a href="logout.php" class="nav-item-title" style="--i: 4">Logout</a>
+        </div>
+        <div class="nav-item">
+            <i class='bx bx-user-circle'></i>
+            <a href="user_profile.php" class="nav-item-title" style="--i: 4">Profile</a>
         </div>
       </nav>
     </header>
@@ -131,17 +149,18 @@
             <label for="remarks">Remarks:</label>
             <textarea id="remarks" name="remarks" rows="4" style="max-width: 360px; max-height: 100px" name="remarks"></textarea>
             
-            <button name="submit">Submit</button>
+            <button name="submit" type="submit">Submit</button>
         </form>
     </section>
-
-
+    
     <script src="index.js"></script>
 </body>
 </html>
 
 <?php
-   if(isset($_POST['submit']))
+$project = $_POST["project"];
+if($project){
+    if(isset($_POST['submit']))
    {
        $project = $_POST["project"];
        $activityTask = $_POST["task"];
@@ -153,11 +172,12 @@
        $totalHours = $_POST["total-hours"];
        $status = $_POST["status"];
        $remarks = $_POST["remarks"];
+       $userName = $_SESSION["name"];
    }
 
   $con = mysqli_connect("localhost","root","oreoluwa2003","daily_logging");
 
-  $sql = "INSERT INTO `project_details` (`project_id`, `project`, `Activity/Task`, `ClientType`, `Reference/ID`, `Date`, `StartTime`, `EndTime`, `TotalHours`, `Status`, `Remarks`) VALUES ('0', '$project', '$activityTask', '$client', '$reference', '$date', '$startTime', '$endTime', '$totalHours', '$status', '$remarks')";
+  $sql = "INSERT INTO `project_details` (`project_id`, `project`, `Activity`, `ClientType`, `Reference`, `Date`, `StartTime`, `EndTime`, `TotalHours`, `Status`, `Remarks`, `user_name`) VALUES ('0', '$project', '$activityTask', '$client', '$reference', '$date', '$startTime', '$endTime', '$totalHours', '$status', '$remarks', '$userName')";
 
   $rs = mysqli_query($con, $sql);
 
@@ -169,6 +189,12 @@
   }
 
   mysqli_close($con);
+}
+   
 ?>
+
+
+
+
 
 

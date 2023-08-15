@@ -16,7 +16,7 @@
         $_SESSION["user_id"] = $row["user_id"];
         $_SESSION["name"] = $row["Fullname"];
         $_SESSION["admin"] = $row["is_admin"];
-
+        
         header("Location: dashboard.php"); // Redirect to user dashboard 
     }  
     else{  
