@@ -63,6 +63,7 @@
             cursor: pointer;
         }
     </style>
+   
 </head>
 <body>
     <!--NavBar -->
@@ -193,7 +194,6 @@
         <tbody></tbody>
     </table>
     <?php }?>
-    <script src="index.js"></script>
 </body>
 </html>
 
