@@ -1,21 +1,25 @@
 <?php
+
 include "config.php"; // Include the database connection file
 
 
+if (isset($_GET['name'])) {
+    $employeeId = trim($_GET['name']);
 
-// Get the employee ID from the query parameter
-// $employeeName = 
+    // Query to retrieve employee profile based on the employeeId
+    $sql = "SELECT * FROM project_details WHERE user_name ='$employeeId'";
+    $result = $conn->query($sql);
 
-// Fetch employee details from the database based on the ID
-$sql = "SELECT * FROM project_details WHERE user_name = 'ore'";
-$result = $conn->query($sql);
-
-if ($result->num_rows > 0) {
-    $row = $result->fetch_assoc();
-    $employeeName = $row['user_name'];
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+    } else {
+        echo "Employee not found.";
+    }
 } else {
-    echo "Employee not found.";
+    echo "Invalid request.";
 }
+    
+
 ?>
 
 <!DOCTYPE html>
@@ -23,15 +27,15 @@ if ($result->num_rows > 0) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo $employeeName; ?>'s Profile</title>
+    <title><?php echo $row['user_name']?>'s Profile</title>
     <link rel="stylesheet" href="./css/dashboard.css">
 </head>
 <body style="background: #303030; padding: 4rem;">
-    <h1 style="margin-left: 400px; text-transform: capitalize;"><?php echo $employeeName; ?>'s Profile</h1>
+    <h1 style="margin-left: 400px; text-transform: capitalize;"><?php echo $row['user_name']?>'s Profile</h1>
     <form action="employee_profile.php" method="POST" style="width: 27%; margin-left: 400px;">
                 <label for="project">Assign to Project</label>
                 <select id="project" name="project">
-                        <option value="<?php $row['project']?>"><?php echo $row['project']?></option>
+                        <option value="<?php echo $row['project']?>"><?php echo $row['project']?></option>
                         <option value="Ibile-Hub">Ibile-Hub</option>
                         <option value="RevBill">RevBill</option>
                         <option value="LASEPA">LASEPA</option>
@@ -51,38 +55,8 @@ if ($result->num_rows > 0) {
                         <option value="LASPA">LASPA</option>
                         <option value="LASEMA">LASEMA</option>
                 </select>
-                
-                <button name="submit" type="submit">Assign</button>
+
+                <button name="submit" type="submit" id="assign">Assign</button>
     </form>
 </body>
-</html>
-<?php 
-    $errors = [];
-    $errorMessage = '';
-
-    if (!empty($_POST)) {
-    $email = "ojoore35@gmail.com";
-    $message = "Baby let me love you love you love you". $_POST['project'];
-
-
-
-    if (empty($message)) {
-        $errors[] = 'Message is empty';
-    }
-
-    if (empty($errors)) {
-        $toEmail = 'ore_ojo14@yahoo.com';
-        $emailSubject = 'New email from your contact form';
-        $headers = ['From' => $email, 'Reply-To' => $email, 'Content-type' => 'text/html; charset=utf-8'];
-        $bodyParagraphs = ["Email: {$email}", "Message:", $message];
-        $body = join(PHP_EOL, $bodyParagraphs);
- 
-        if (mail($toEmail, $emailSubject, $body, $headers)) {
- 
-            echo "It worked";
-        } else {
-            $errorMessage = 'Oops, something went wrong. Please try again later';
-        }
-    }
-}
-?>
+</html> 

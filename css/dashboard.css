@@ -2,12 +2,13 @@
 
 * {
   margin: 0;
-  padding: 0;
+  /* padding-bottom:  5rem; */
   box-sizing: border-box;
   font-family: "Poppins", sans-serif;
 }
 html{
     scroll-behavior: smooth;
+    padding-bottom: 5rem;
 }
 
 
@@ -88,9 +89,7 @@ button:hover {
   align-items: center;
   z-index: 5;
 }
-.navbar{
-    display: flex;
-}
+
 
 .header::before {
   content: "";
@@ -142,10 +141,7 @@ button:hover {
   margin-left: 2.5rem;
   transition: all 0.5s ease;
 }
-.nav-item-title{
-    color: #fff;
-    text-decoration: none;
-}
+
 
 .nav-item:hover, .nav-item-title:hover{
   color: skyblue;

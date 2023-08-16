@@ -4,15 +4,22 @@ include "config.php"; // Include the database connection file
 session_start();
 // Get the employee ID from the query parameter
 $employeeName = $_SESSION["name"];
+$employeeId = $_SESSION["user_id"];
 
 // Fetch employee details from the database based on the ID
-$sql = "SELECT * FROM user_details WHERE Fullname = '$employeeName'";
+$sql = "SELECT * FROM user_details WHERE user_id = '$employeeId'";
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
-    $employeeName = $row['Fullname'];
+    $employeeFirstname = $row['Firstname'];
+    $employeeLastname = $row['Lastname'];
+    $employeeFullname = $row['Firstname']. " " . $row['Lastname'];
     $employeeEmail = $row['Email'];
+    $employeePhone = $row['Phonenumber'];
+    $employeeAddress = $row['Address'];
+    $employeeCountry = $row['Country'];
+
 } else {
     echo "Employee not found.";
 }
@@ -23,7 +30,7 @@ if ($result->num_rows > 0) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo $employeeName; ?>'s Profile</title>
+    <title><?php echo $employeeFullname; ?>'s Profile</title>
     <link rel="stylesheet" href="./css/user-profile.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js">
@@ -34,7 +41,7 @@ if ($result->num_rows > 0) {
     <div class="container rounded bg-white mt-5">
         <div class="row">
             <div class="col-md-4 border-right">
-                <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5" src="./images/user-profile.webp" width="90"><span class="font-weight-bold"><?php echo $employeeName; ?></span><span class="text-black-50"><?php echo $employeeEmail; ?></span><span>United States</span></div>
+                <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5" src="./images/user-profile.webp" width="90"><span class="font-weight-bold"><?php echo $employeeFirstname; ?></span><span class="text-black-50"><?php echo $employeeEmail; ?></span><span><?php echo $employeeCountry; ?></span></div>
             </div>
             <div class="col-md-8">
                 <div class="p-3 py-5">
@@ -45,26 +52,52 @@ if ($result->num_rows > 0) {
                         </div>
                         <h6 class="text-right">Edit Profile</h6>
                     </div>
-                    <div class="row mt-2">
-                        <div class="col-md-6"><input type="text" class="form-control" placeholder="first name" value="John"></div>
-                        <div class="col-md-6"><input type="text" class="form-control" value="Doe" placeholder="Doe"></div>
-                    </div>
-                    <div class="row mt-3">
-                        <div class="col-md-6"><input type="text" class="form-control" placeholder="Email" value="john_doe12@bbb.com"></div>
-                        <div class="col-md-6"><input type="text" class="form-control" value="+19685969668" placeholder="Phone number"></div>
-                    </div>
-                    <div class="row mt-3">
-                        <div class="col-md-6"><input type="text" class="form-control" placeholder="address" value="D-113, right avenue block, CA,USA"></div>
-                        <div class="col-md-6"><input type="text" class="form-control" value="USA" placeholder="Country"></div>
-                    </div>
-                    <div class="row mt-3">
-                        <div class="col-md-6"><input type="text" class="form-control" placeholder="Bank Name" value="Bank of America"></div>
-                        <div class="col-md-6"><input type="text" class="form-control" value="043958409584095" placeholder="Account Number"></div>
-                    </div>
-                    <div class="mt-5 text-right"><button class="btn btn-primary profile-button" type="button">Save Profile</button></div>
-                </div>
+                    <form action="user_profile.php" method="POST">
+                        <div class="row mt-2">
+                                <div class="col-md-6"><input type="text" class="form-control" placeholder="first name" value="<?php echo $employeeFirstname; ?>" name="first_name"></div>
+                                <div class="col-md-6"><input type="text" class="form-control" value="<?php echo $employeeLastname; ?>" placeholder="Lastname" name="last_name"></div>
+                        </div>
+                        <div class="row mt-3">
+                                <div class="col-md-6"><input type="text" class="form-control" placeholder="Email" value="<?php echo $employeeEmail; ?>" name="email"></div>
+                                <div class="col-md-6"><input type="text" class="form-control" value="<?php echo $employeePhone; ?>" placeholder="Phone number" name="phone_number"></div>
+                        </div>
+                        <div class="row mt-3">
+                                <div class="col-md-6"><input type="text" class="form-control" placeholder="address" value="<?php echo $employeeAddress; ?>" name="address"></div>
+                                <div class="col-md-6"><input type="text" class="form-control" value="<?php echo $employeeCountry; ?>" placeholder="Country" name="country"></div>
+                        </div>
+                        </div>
+                        <div class="mt-5 text-right"><button class="btn btn-primary profile-button" type="submit" name="submit">Save Profile</button></div>
+                        </div>
+                    </form>
+                    
             </div>
         </div>
     </div>
 </body>
 </html>
+<?php 
+    include "config.php";
+    // session_start();
+
+    if ($_SERVER["REQUEST_METHOD"] === "POST") {
+        $newFirstname = $_POST["first_name"];
+        $newLastname = $_POST["last_name"];
+        $newEmail = $_POST["email"];
+        $newPhone = $_POST["phone_number"];
+        $newAddress = $_POST["address"];
+        $newCountry = $_POST["country"];
+        $userId = $_SESSION["user_id"];
+
+        $updateQuery = "UPDATE user_details SET Firstname = '$newFirstname', Lastname = '$newLastname', Email = '$newEmail', Phonenumber = '$newPhone', Address = '$newAddress', Country = '$newCountry' WHERE user_id = '$userId'";
+
+        if ($conn->query($updateQuery) === TRUE) {
+            echo '<script type ="text/JavaScript">'; 
+            echo 'alert("Profile Updated successfully!")';
+            echo '</script>';
+        } else {
+            echo "Error updating profile: " . $conn->error;
+        }
+    
+        $conn->close();
+    }
+?>

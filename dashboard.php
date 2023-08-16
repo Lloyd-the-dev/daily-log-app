@@ -24,6 +24,44 @@
             background-position: center;
             color: #fff;
         }
+
+        #customers {
+            margin: 200px auto;
+            font-family: Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            width: 80%;
+            color: black;
+        }
+
+        #customers td, #customers th {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+ 
+        #customers tr{
+            background-color: white;
+        }
+        #customers tr:hover {
+            background-color: #ddd;
+        }
+
+        #customers th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: dodgerblue;
+            color: white;
+        }
+        #customers a{
+            color: black;
+            text-decoration: none;
+            text-transform: capitalize;
+
+        }
+        #customers i{
+            color: red;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -37,34 +75,17 @@
         <i class="bx bx-x" id="close-icon"></i>
       </label>
 
+
+
       <nav class="navbar">
-        <div class="nav-item">
-            <i class='bx bx-home-circle'></i>
-            <a href="dashboard.php" style="--i: 0" class="nav-item-title">Home</a>
-        </div>
         <?php if ($_SESSION["admin"] == 1) { ?>
-            <div class="nav-item">
-            <i class='bx bxs-edit-alt'></i>
-            <a href="adminDashboard.html"  style="--i: 1" class="nav-item-title">Logs</a>
-        </div>
+            <a href="adminDashboard.html" style="--i: 0" class="nav-item"><i class='bx bxs-edit-alt'></i> Logs</a>
         <?php } else{ ?>
-            <div class="nav-item">
-                <i class='bx bx-laptop'></i>
-                <a href="#projects"  style="--i: 1" class="nav-item-title">Projects</a>
-            </div>
+            <a href="#projects"  style="--i: 0" class="nav-item"><i class='bx bx-laptop'></i> Projects</a>
         <?php } ?>
-        <div class="nav-item">
-                <i class='bx bxs-report'></i>
-                <a href="" style="--i: 4" class="nav-item-title">Report</a>
-        </div>
-        <div class="nav-item">
-            <i class='bx bx-log-out'></i>
-            <a href="logout.php" class="nav-item-title" style="--i: 4">Logout</a>
-        </div>
-        <div class="nav-item">
-            <i class='bx bx-user-circle'></i>
-            <a href="user_profile.php" class="nav-item-title" style="--i: 4">Profile</a>
-        </div>
+            <a href="" style="--i: 1" class="nav-item"><i class='bx bxs-report'></i> Report</a>
+            <a href="user_profile.php" class="nav-item" style="--i: 2"><i class='bx bx-user-circle'></i> Profile</a>
+            <a href="logout.php" class="nav-item" style="--i: 3"><i class='bx bx-log-out'></i> Logout</a>
       </nav>
     </header>
     <h1 class="welcome-message">Welcome, <?php echo $_SESSION["name"]; ?>
@@ -79,8 +100,7 @@
             <h2 class="project-heading">What Project Did you work on Today?</h2>
 
             <label for="project">Projects</label>
-            <select id="project" name="project" readonly>
-                    <option value="0">Select Project:</option>
+            <select id="project" name="project" readonly required>
                     <option value="Ibile-Hub">Ibile-Hub</option>
                     <option value="RevBill">RevBill</option>
                     <option value="LASEPA">LASEPA</option>
@@ -102,11 +122,10 @@
             </select>
 
             <label for="message">Activity/Task</label>
-            <textarea id="message" rows="4" class="activity" style="max-width: 360px; max-height: 100px" name="task"></textarea>
+            <textarea id="message" rows="4" class="activity" style="max-width: 360px; max-height: 100px" name="task" required></textarea>
 
             <label for="client" class="client">ClientType</label>
-            <select width="500px" id="client" name="client" readonly>
-                    <option value="0">Select Client type:</option>
+            <select width="500px" id="client" name="client" readonly required>
                     <option value="Login-Access">Login-Access</option>
                     <option value="LSJ">LSJ</option>
                     <option value="RevBill">RevBill</option>
@@ -139,7 +158,7 @@
             <input type="hidden" id="total-hours" name="total-hours" value="0">
 
             <label for="status">Status</label>
-            <select id="status" name="status">
+            <select id="status" name="status" required>
                 <option value="Pending">Pending</option>
                 <option value="Work in Progress">Work in Progress</option>
                 <option value="Resolved">Resolved</option>
@@ -147,21 +166,39 @@
             </select>
 
             <label for="remarks">Remarks:</label>
-            <textarea id="remarks" name="remarks" rows="4" style="max-width: 360px; max-height: 100px" name="remarks"></textarea>
+            <textarea id="remarks" name="remarks" rows="4" required style="max-width: 360px; max-height: 100px" name="remarks"></textarea>
             
             <button name="submit" type="submit">Submit</button>
         </form>
     </section>
     
+    <!--The Table(excel sheet) of Projects -->
+    <?php if ($_SESSION["admin"] != 1) { ?>
+    <table id="customers">
+        <thead>
+            <tr>
+                <th>Employee's Name</th>
+                <th>Project</th>
+                <th>Activity/Task</th>
+                <th>ClientType</th>
+                <th>Reference/ID</th>
+                <th>Date</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>Total Hours</th>
+                <th>Status</th>
+                <th>Remarks</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <?php }?>
     <script src="index.js"></script>
 </body>
 </html>
 
 <?php
-$project = $_POST["project"];
-if($project){
-    if(isset($_POST['submit']))
-   {
+    if(!empty($_POST["task"])){
        $project = $_POST["project"];
        $activityTask = $_POST["task"];
        $client = $_POST["client"];
@@ -173,23 +210,23 @@ if($project){
        $status = $_POST["status"];
        $remarks = $_POST["remarks"];
        $userName = $_SESSION["name"];
-   }
+ 
 
-  $con = mysqli_connect("localhost","root","oreoluwa2003","daily_logging");
+        $con = mysqli_connect("localhost","root","oreoluwa2003","daily_logging");
 
-  $sql = "INSERT INTO `project_details` (`project_id`, `project`, `Activity`, `ClientType`, `Reference`, `Date`, `StartTime`, `EndTime`, `TotalHours`, `Status`, `Remarks`, `user_name`) VALUES ('0', '$project', '$activityTask', '$client', '$reference', '$date', '$startTime', '$endTime', '$totalHours', '$status', '$remarks', '$userName')";
+        $sql = "INSERT INTO `project_details` (`project_id`, `project`, `Activity`, `ClientType`, `Reference`, `Date`, `StartTime`, `EndTime`, `TotalHours`, `Status`, `Remarks`, `user_name`) VALUES ('0', '$project', '$activityTask', '$client', '$reference', '$date', '$startTime', '$endTime', '$totalHours', '$status', '$remarks', '$userName')";
 
-  $rs = mysqli_query($con, $sql);
+        $rs = mysqli_query($con, $sql);
 
-  if($rs)
-  {
-    echo '<script type ="text/JavaScript">'; 
-    echo 'alert("Activity successfully added!")';
-    echo '</script>';  
-  }
+        if($rs)
+        {
+            echo '<script type ="text/JavaScript">'; 
+            echo 'alert("Activity successfully added!")';
+            echo '</script>';  
+        }
 
-  mysqli_close($con);
-}
+        mysqli_close($con);
+    }
    
 ?>
 

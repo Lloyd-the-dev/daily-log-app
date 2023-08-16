@@ -9,7 +9,7 @@ fetch('admin.php')
                 const nameCell = newRow.insertCell();
                 const nameLink = document.createElement('a');
                 nameLink.textContent = row.user_name;
-                nameLink.href = `employee_profile.php`; // Pass employee ID as query parameter
+                nameLink.href = `employee_profile.php?name= ${row.user_name}`; // Pass employee ID as query parameter
                 nameCell.appendChild(nameLink);
                 
                 newRow.insertCell().textContent = row.project;
@@ -21,7 +21,9 @@ fetch('admin.php')
                 newRow.insertCell().textContent = row.EndTime;
                 newRow.insertCell().textContent = row.TotalHours;
                 newRow.insertCell().textContent = row.Status;
-                newRow.insertCell().textContent = row.Remarks;
+                newRow.insertCell().textContent = row.Remarks; 
+                newRow.insertCell().innerHTML = '<td><a href="delete_row.php?name=' + row.user_name + '"><i class="bx bx-trash" ></i></a></td>';
+
             });
         })
         .catch(error => console.error('Error fetching data:', error));
