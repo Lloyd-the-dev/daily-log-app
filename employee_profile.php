@@ -86,6 +86,18 @@
         .home:hover{
             color: purple;
         }
+        a{
+            color: black;
+            text-decoration: none;
+            text-transform: capitalize;
+
+        }
+        .btns{
+            display: flex;
+            width: 80%;
+            justify-content: space-between;
+            margin: 0 auto;
+        }
 
     </style>
 </head>
@@ -122,9 +134,11 @@
                         <option value="LASPA">LASPA</option>
                         <option value="LASEMA">LASEMA</option>
                 </select>
-                <button name="submit" type="submit" onclick="redirectToEmail()">Assign</button>
+                <div class="btns">
+                    <button name="submit" type="submit" onclick="redirectToEmail()">Assign</button>
+                    <button name="make-admin">Make Admin</button>
+                </div>
     </form>
-
     <script>
         function redirectToEmail() {
             let email = "<?php echo $row['Email']; ?>";

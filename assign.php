@@ -1,14 +1,16 @@
 <?php
     include "config.php";
 
-    if (isset($_GET['name']) && isset($_POST['project'])) {
-        $employeeName = trim($_GET['name']);
-        $project = $_POST['project'];
-        $sql = "SELECT * FROM user_details WHERE Firstname ='$employeeName'";
-        $result = $conn->query($sql);
-
-        if ($result->num_rows > 0) {
-            $row = $result->fetch_assoc();
+        if (isset($_GET['name']) && isset($_POST['project'])) {
+            $employeeName = trim($_GET['name']);
+            $project = $_POST['project'];
+            if (isset($_POST["submit"])) {
+                $sql = "SELECT * FROM user_details WHERE Firstname ='$employeeName'";
+                $result = $conn->query($sql);
+        
+                if ($result->num_rows > 0) {
+                    $row = $result->fetch_assoc();
+    
 ?>
             <!DOCTYPE html>
             <html>
@@ -51,7 +53,38 @@
         } else {
             echo "Employee not found.";
         }
+    }else if (isset($_POST["make-admin"])){
+        $checkQuery = "SELECT is_admin FROM user_details WHERE Firstname = '$employeeName'";
+        $stmt = $conn->prepare($checkQuery);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            if($row["is_admin"] == 1){
+                echo '<script type ="text/JavaScript">'; 
+                echo 'alert("User is already an Admin!")';
+                echo '</script>';
+            }else{
+                $admin = 1;
+                $updateQuery = "UPDATE user_details SET is_admin = '$admin' WHERE Firstname = '$employeeName'";
+        
+                if ($conn->query($updateQuery) === TRUE) {
+                    echo '<script type ="text/JavaScript">'; 
+                    echo 'alert("User has been made an Admin!")';
+                    echo '</script>';
+                } else {
+                    echo "Error updating profile: " . $conn->error;
+                }
+            
+                $conn->close();
+            }
+        }
+     
+
     } else {
         echo "Invalid request.";
     }
+    } 
+
 ?>
