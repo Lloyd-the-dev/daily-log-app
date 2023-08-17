@@ -11,6 +11,7 @@ fetch('admin.php')
                 nameLink.textContent = row.user_name;
                 nameLink.href = `employee_profile.php?name= ${row.user_name}`; // Pass employee ID as query parameter
                 nameCell.appendChild(nameLink);
+
                 
                 newRow.insertCell().textContent = row.project;
                 newRow.insertCell().textContent = row.Activity;
@@ -22,7 +23,7 @@ fetch('admin.php')
                 newRow.insertCell().textContent = row.TotalHours;
                 newRow.insertCell().textContent = row.Status;
                 newRow.insertCell().textContent = row.Remarks; 
-                newRow.insertCell().innerHTML = '<td><a href="delete_row.php?name=' + row.user_name + '"><i class="bx bx-trash" ></i></a></td>';
+                newRow.insertCell().innerHTML = '<td><a href="delete_row.php?name=' + row.user_name + '&row='+ row.project_id + '"><i class="bx bx-trash" ></i></a></td>';
 
             });
         })

@@ -62,10 +62,33 @@
             color: red;
             cursor: pointer;
         }
+        #myBtn{
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 30px;
+            z-index: 99;
+            font-size: 20px;
+            border: none;
+            outline: none;
+            background-color: dodgerblue;
+            color: white;
+            cursor: pointer;
+            padding: .5rem;
+            border-radius: 4px;
+            transition: 1s ease-in-out;
+        }
+        #myBtn:hover {
+            background-color: #555;
+        }
+        #icon{
+            font-size: 30px;
+        }
     </style>
    
 </head>
 <body>
+    <button onclick="topFunction()" id="myBtn" title="Go to top"><i class='bx bx-up-arrow' id="icon"></i></button>
     <!--NavBar -->
     <header class="header">
       <a href="#" class="logo"><span style="color: orangered">Alpha</span>BetaConsulting</a>
@@ -194,6 +217,30 @@
         <tbody></tbody>
     </table>
     <?php }?>
+
+    <script>
+        // Get the button
+        let mybutton = document.getElementById("myBtn");
+
+        // When the user scrolls down 20px from the top of the document, show the button
+        window.onscroll = function() {scrollFunction()};
+
+        function scrollFunction() {
+        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+            mybutton.style.display = "block";
+        } else {
+            mybutton.style.display = "none";
+        }
+        }
+
+        // When the user clicks on the button, scroll to the top of the document
+        function topFunction() {
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+        }
+    </script>
+    <script src="index.js"></script>
+
 </body>
 </html>
 
