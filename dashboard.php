@@ -10,13 +10,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Dashboard</title>
     <link rel="stylesheet" href="./css/dashboard.css">
+    <link rel="stylesheet" href="./css/test.scss">
+
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     
-    <style>
+    <style id="table_style" type="text/css">
         body {
             min-height: 100vh;
             background: url(https://github.com/ecemgo/mini-samples-great-tricks/assets/13468728/844a2e12-df15-4697-b172-3e05db4d3413) no-repeat;
@@ -26,7 +29,7 @@
         }
 
         #customers {
-            margin: 200px auto;
+            margin: 200px auto 0 auto;
             font-family: Arial, Helvetica, sans-serif;
             border-collapse: collapse;
             width: 80%;
@@ -84,6 +87,50 @@
         #icon{
             font-size: 30px;
         }
+        .export{
+            margin-top: 20px;
+            margin-left: 640px;
+        }
+        
+        @media print{
+            #customers {
+            margin: 200px auto 0 auto;
+            font-family: Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            width: 80%;
+            color: black;
+            }
+
+            #customers td, #customers th {
+                border: 1px solid #ddd;
+                padding: 8px;
+            }
+    
+            #customers tr{
+                background-color: white;
+            }
+            #customers tr:hover {
+                background-color: #ddd;
+            }
+
+            #customers th {
+                padding-top: 12px;
+                padding-bottom: 12px;
+                text-align: left;
+                background-color: dodgerblue;
+                color: white;
+            }
+            #customers a{
+                color: black;
+                text-decoration: none;
+                text-transform: capitalize;
+
+            }
+            #customers i{
+                color: red;
+                cursor: pointer;
+            }
+        }
     </style>
    
 </head>
@@ -107,7 +154,7 @@
         <?php } else{ ?>
             <a href="#projects"  style="--i: 0" class="nav-item"><i class='bx bx-laptop'></i> Projects</a>
         <?php } ?>
-            <a href="" style="--i: 1" class="nav-item"><i class='bx bxs-report'></i> Report</a>
+            <a href="#customers" style="--i: 1" class="nav-item"><i class='bx bxs-report'></i> Report</a>
             <a href="user_profile.php" class="nav-item" style="--i: 2"><i class='bx bx-user-circle'></i> Profile</a>
             <a href="logout.php" class="nav-item" style="--i: 3"><i class='bx bx-log-out'></i> Logout</a>
       </nav>
@@ -197,7 +244,6 @@
     </section>
     
     <!--The Table(excel sheet) of Projects -->
-    <?php if ($_SESSION["admin"] != 1) { ?>
     <table id="customers">
         <thead>
             <tr>
@@ -216,9 +262,87 @@
         </thead>
         <tbody></tbody>
     </table>
-    <?php }?>
 
+    <button class="primary" onclick="window.dialog.showModal();">Generate Report</button>
+
+    <dialog id="dialog">
+            <button id="btnExport" onclick="ExportToExcel('xlsx')">Excel format</button> <br>
+            <!--Button for PDF format -->
+            <button onclick="Export()">PDF format</button> <br>
+            <!--Button for printing -->
+            <button onclick="PrintTable()">Print</button> 
+            <button onclick="window.dialog.close();" aria-label="close" class="x">❌</button>
+    </dialog>
+
+  
+
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.22/pdfmake.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+    <script src="index.js"></script>
     <script>
+        // Get the modal
+        var modal = document.getElementById("myModal");
+
+        // Get the button that opens the modal
+        var btn = document.getElementById("myBtn2");
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks the button, open the modal 
+        btn.onclick = function() {
+        modal.style.display = "block";
+        }
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() {
+        modal.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+        }
+        //Print The Table
+        function PrintTable() {
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write('<html><head><title>Printable Table</title></head><body>');
+            printWindow.document.write('<style>' + document.querySelector('style').innerHTML + '</style>');
+            printWindow.document.write('</head><body>');
+            printWindow.document.write(document.getElementById('customers').outerHTML);
+            printWindow.document.write('</body></html>');
+            printWindow.document.close();
+            printWindow.print();
+        }
+
+        //PDF format
+        function Export() {
+            html2canvas(document.getElementById('customers'), {
+                onrendered: function (canvas) {
+                    var data = canvas.toDataURL();
+                    var docDefinition = {
+                        content: [{
+                            image: data,
+                            width: 500
+                        }]
+                    };
+                    pdfMake.createPdf(docDefinition).download("EmployeesLogs.pdf");
+                }
+            });
+        }
+
+
+        //Excel Format
+        function ExportToExcel(type, fn, dl) {
+            let elt = document.getElementById('customers');
+            let wb = XLSX.utils.table_to_book(elt, { sheet: "sheet1" });
+            return dl ?
+                XLSX.write(wb, { bookType: type, bookSST: true, type: 'base64' }):
+                XLSX.writeFile(wb, fn || ('EmployeeLogs.' + (type || 'xlsx')));
+        }
         // Get the button
         let mybutton = document.getElementById("myBtn");
 
@@ -239,7 +363,6 @@
         document.documentElement.scrollTop = 0;
         }
     </script>
-    <script src="index.js"></script>
 
 </body>
 </html>
@@ -273,7 +396,7 @@
         }
 
         mysqli_close($con);
-    }
+}
    
 ?>
 

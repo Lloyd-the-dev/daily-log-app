@@ -11,6 +11,9 @@ html{
     padding-bottom: 5rem;
 }
 
+.export{
+  margin-left: 400px;
+}
 
 .welcome-message{
     margin: 150px;
