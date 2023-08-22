@@ -154,7 +154,7 @@
         <?php } else{ ?>
             <a href="#projects"  style="--i: 0" class="nav-item"><i class='bx bx-laptop'></i> Projects</a>
         <?php } ?>
-            <a href="#customers" style="--i: 1" class="nav-item"><i class='bx bxs-report'></i> Report</a>
+            <a href="report.php" style="--i: 1" class="nav-item"><i class='bx bxs-report'></i> Report</a>
             <a href="user_profile.php" class="nav-item" style="--i: 2"><i class='bx bx-user-circle'></i> Profile</a>
             <a href="logout.php" class="nav-item" style="--i: 3"><i class='bx bx-log-out'></i> Logout</a>
       </nav>
@@ -243,106 +243,13 @@
         </form>
     </section>
     
-    <!--The Table(excel sheet) of Projects -->
-    <table id="customers">
-        <thead>
-            <tr>
-                <th>Employee's Name</th>
-                <th>Project</th>
-                <th>Activity/Task</th>
-                <th>ClientType</th>
-                <th>Reference/ID</th>
-                <th>Date</th>
-                <th>Start Time</th>
-                <th>End Time</th>
-                <th>Total Hours</th>
-                <th>Status</th>
-                <th>Remarks</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
-
-    <button class="primary" onclick="window.dialog.showModal();">Generate Report</button>
-
-    <dialog id="dialog">
-            <button id="btnExport" onclick="ExportToExcel('xlsx')">Excel format</button> <br>
-            <!--Button for PDF format -->
-            <button onclick="Export()">PDF format</button> <br>
-            <!--Button for printing -->
-            <button onclick="PrintTable()">Print</button> 
-            <button onclick="window.dialog.close();" aria-label="close" class="x">❌</button>
-    </dialog>
+    
+   
 
   
 
-
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.22/pdfmake.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
     <script src="index.js"></script>
     <script>
-        // Get the modal
-        var modal = document.getElementById("myModal");
-
-        // Get the button that opens the modal
-        var btn = document.getElementById("myBtn2");
-
-        // Get the <span> element that closes the modal
-        var span = document.getElementsByClassName("close")[0];
-
-        // When the user clicks the button, open the modal 
-        btn.onclick = function() {
-        modal.style.display = "block";
-        }
-
-        // When the user clicks on <span> (x), close the modal
-        span.onclick = function() {
-        modal.style.display = "none";
-        }
-
-        // When the user clicks anywhere outside of the modal, close it
-        window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
-        }
-        //Print The Table
-        function PrintTable() {
-            const printWindow = window.open('', '_blank');
-            printWindow.document.write('<html><head><title>Printable Table</title></head><body>');
-            printWindow.document.write('<style>' + document.querySelector('style').innerHTML + '</style>');
-            printWindow.document.write('</head><body>');
-            printWindow.document.write(document.getElementById('customers').outerHTML);
-            printWindow.document.write('</body></html>');
-            printWindow.document.close();
-            printWindow.print();
-        }
-
-        //PDF format
-        function Export() {
-            html2canvas(document.getElementById('customers'), {
-                onrendered: function (canvas) {
-                    var data = canvas.toDataURL();
-                    var docDefinition = {
-                        content: [{
-                            image: data,
-                            width: 500
-                        }]
-                    };
-                    pdfMake.createPdf(docDefinition).download("EmployeesLogs.pdf");
-                }
-            });
-        }
-
-
-        //Excel Format
-        function ExportToExcel(type, fn, dl) {
-            let elt = document.getElementById('customers');
-            let wb = XLSX.utils.table_to_book(elt, { sheet: "sheet1" });
-            return dl ?
-                XLSX.write(wb, { bookType: type, bookSST: true, type: 'base64' }):
-                XLSX.writeFile(wb, fn || ('EmployeeLogs.' + (type || 'xlsx')));
-        }
         // Get the button
         let mybutton = document.getElementById("myBtn");
 
