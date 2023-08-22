@@ -41,7 +41,7 @@
             outline: none;
             border-color: #3498db;
         }
-        .btn{
+        .btn, button{
             background-color: #3498db;
             color: white;
             padding: 10px 15px;
@@ -51,7 +51,9 @@
             margin-top: 15px;
             transition: background-color 0.3s ease-in-out;
         }
-
+        button{
+            background-color: #303030;
+        }
         .btn:hover {
             background-color: #2980b9;
         }
