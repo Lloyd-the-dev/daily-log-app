@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Generate Report | 2023</title>
     <link rel="stylesheet" href="./css/test.scss">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <style>
         body{
             font-family: "Poppins", sans-serif;
@@ -98,7 +99,26 @@
             margin-top: 20px;
             margin-left: 640px;
         }
-        
+        .head{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 60%;
+        }
+        .head h1{
+            text-decoration: underline;
+        }
+        .home{
+            transition: 1s ease-in-out;
+        }
+        .home:hover{
+            color: purple;
+        }
+        a{
+            color: black;
+            text-decoration: none;
+            text-transform: capitalize;
+        }
         @media print{
             #customers {
             margin: 200px auto 0 auto;
@@ -141,7 +161,11 @@
     </style>
 </head>
 <body>
-<form id="dateRangeForm" class="container">
+    <div class="head">
+        <a href="./dashboard.php" class="home"><i class='bx bx-arrow-back'></i>Back to home</a>
+        <h1>Generate Report</h1>
+    </div>
+    <form id="dateRangeForm" class="container">
         <label for="startDate">Start Date:</label> <br>
         <input type="date" id="startDate" autocomplete="off"><br>
         <label for="endDate">End Date:</label><br>
@@ -154,7 +178,7 @@
         
 
     </form>
-    
+
     <table id="customers">
             <thead>
                 <tr>
