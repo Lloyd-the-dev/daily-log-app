@@ -141,6 +141,20 @@
     </style>
 </head>
 <body>
+<form id="dateRangeForm" class="container">
+        <label for="startDate">Start Date:</label> <br>
+        <input type="date" id="startDate" autocomplete="off"><br>
+        <label for="endDate">End Date:</label><br>
+        <input type="date" id="endDate" autocomplete="off"><br>
+        <div class="btn">
+            <button type="button" onclick="printTable()">Print Table</button>
+            <button onclick="ExportToPDF()" type="button">PDF format</button>
+            <button id="btnExport" type="button" onclick="ExportToExcel('xlsx', 'EmployeeLogs.xlsx', true)">Excel format</button>
+        </div>
+        
+
+    </form>
+    
     <table id="customers">
             <thead>
                 <tr>
@@ -159,21 +173,14 @@
             </thead>
             <tbody></tbody>
     </table>
-    <form id="dateRangeForm" class="container">
-        <label for="startDate">Start Date:</label> <br>
-        <input type="date" id="startDate" autocomplete="off"><br>
-        <label for="endDate">End Date:</label><br>
-        <input type="date" id="endDate" autocomplete="off"><br>
-        <div class="btn">
-            <button type="button" onclick="printTable()">Print Table</button>
-            <button id="btnExport" onclick="ExportToExcel('xlsx')">Excel format</button>
-            <button onclick="Export()" type="button">PDF format</button>
-        </div>
-        
-    </form>
+   
+
 
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.22/pdfmake.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.0/FileSaver.min.js" integrity="sha512-csNcFYJniKjJxRWRV1R7fvnXrycHP6qDR21mgz1ZP55xY5d+aHLfo9/FcGDQLfn2IfngbAHd8LdfsagcCqgTcQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
         fetch('admin.php')
         .then(response => response.json())
@@ -201,6 +208,12 @@
         function printTable() {
             const startDate = document.getElementById('startDate').value;
             const endDate = document.getElementById('endDate').value;
+     
+
+            if (!startDate || !endDate) {
+                alert('Please select both start and end dates.');
+                return;
+            }
             const printWindow = window.open('', '_blank');
             printWindow.document.write('<html><head><title>Printable Table</title>');
             printWindow.document.write('<style>' + document.querySelector('style').innerHTML + '</style>');
@@ -228,30 +241,134 @@
         }
 
         //PDF format
-        function Export() {
-            html2canvas(document.getElementById('customers'), {
-                onrendered: function (canvas) {
-                    var data = canvas.toDataURL();
-                    var docDefinition = {
-                        content: [{
-                            image: data,
-                            width: 500
-                        }]
-                    };
-                    pdfMake.createPdf(docDefinition).download("EmployeesLogs.pdf");
+
+        function ExportToPDF() {
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+
+            if (!startDate || !endDate) {
+                alert('Please select both start and end dates.');
+                return;
+            }
+
+            const table = document.getElementById('customers');
+            const tableRows = table.querySelectorAll('tbody tr');
+
+            const filteredRows = Array.from(tableRows).filter(row => {
+                const dateCell = row.querySelector('td:nth-child(6)');
+                if (dateCell) {
+                    const rowDate = dateCell.textContent;
+                    return rowDate >= startDate && rowDate <= endDate;
                 }
+                return false;
             });
+
+            if (filteredRows.length === 0) {
+                alert('No logs found within the specified date range.');
+                return;
+            }
+
+            const printWindow = window.open('', '_blank');
+            const tableToPrint = document.createElement('table');
+            const tbody = document.createElement('tbody');
+
+            filteredRows.forEach(row => {
+                tbody.appendChild(row.cloneNode(true));
+            });
+
+            tableToPrint.appendChild(table.querySelector('thead').cloneNode(true));
+            tableToPrint.appendChild(tbody);
+
+            const html = `
+                <html>
+                <head>
+                    <style>
+                        table { width: 100%; border-collapse: collapse; }
+                        th, td { border: 1px solid black; padding: 5px; }
+                    </style>
+                </head>
+                <body>
+                    <h2>Employee Logs from ${startDate} to ${endDate}</h2>
+                    ${tableToPrint.outerHTML}
+                </body>
+                </html>
+            `;
+
+            printWindow.document.open();
+            printWindow.document.write(html);
+            printWindow.document.close();
+
+            setTimeout(function () {
+                printWindow.print();
+                printWindow.close();
+            }, 100);
         }
 
 
-        //Excel Format
+
+
+        //Excel Format            
         function ExportToExcel(type, fn, dl) {
-            let elt = document.getElementById('customers');
-            let wb = XLSX.utils.table_to_book(elt, { sheet: "sheet1" });
-            return dl ?
-                XLSX.write(wb, { bookType: type, bookSST: true, type: 'base64' }):
-                XLSX.writeFile(wb, fn || ('EmployeeLogs.' + (type || 'xlsx')));
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+
+            if (!startDate || !endDate) {
+                alert('Please select both start and end dates.');
+                return;
+            }
+
+            const tableBody = document.querySelector('#customers tbody');
+            const tableRows = Array.from(tableBody.querySelectorAll('tr'));
+
+            const filteredRows = tableRows.filter(row => {
+                const dateCell = row.querySelector('td:nth-child(6)');
+                if (dateCell) {
+                    const rowDate = dateCell.textContent;
+                    return rowDate >= startDate && rowDate <= endDate;
+                }
+                return false;
+            });
+
+            if (filteredRows.length === 0) {
+                alert('No logs found within the specified date range.');
+                return;
+            }
+
+            const filteredTable = document.createElement('table');
+            const tbody = document.createElement('tbody');
+
+            filteredRows.forEach(row => {
+                tbody.appendChild(row.cloneNode(true));
+            });
+
+            filteredTable.appendChild(tbody);
+
+            const workbook = XLSX.utils.book_new();
+            const worksheet = XLSX.utils.table_to_sheet(filteredTable, { sheet: 'sheet1' });
+
+            XLSX.utils.book_append_sheet(workbook, worksheet, 'Logs');
+
+            const excelData = XLSX.write(workbook, { bookType: type, bookSST: true, type: 'binary' });
+
+            const blob = new Blob([s2ab(excelData)], { type: 'application/octet-stream' });
+
+            if (dl) {
+                saveAs(blob, fn || 'EmployeeLogs.xlsx');
+            }
+
+            return excelData;
         }
+
+        function s2ab(s) {
+            const buf = new ArrayBuffer(s.length);
+            const view = new Uint8Array(buf);
+            for (let i = 0; i < s.length; i++) {
+                view[i] = s.charCodeAt(i) & 0xFF;
+            }
+            return buf;
+        }
+
+
     </script>
 </body>
 </html>
