@@ -242,7 +242,7 @@
 
         <nav class="navbar">
                 <a href="./filters/date.php" style="--i: 1" class="nav-item">By Date</a>
-                <a href="" class="nav-item" style="--i: 2">By Project</a>
+                <a href="./filters/projects.php" class="nav-item" style="--i: 2">By Project</a>
                 <a href="" class="nav-item" style="--i: 3">By Name</a>
                 <a href="" class="nav-item" style="--i: 4">By Status</a>
                 <a href="" class="nav-item" style="--i: 5">By Client</a>

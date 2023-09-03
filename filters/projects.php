@@ -178,20 +178,37 @@
       </label>
 
         <nav class="navbar">
-                <a href="date.php" style="--i: 1" class="nav-item active">By Date</a>
-                <a href="projects.php" class="nav-item" style="--i: 2">By Project</a>
+                <a href="date.php" style="--i: 1" class="nav-item">By Date</a>
+                <a href="projects.php" class="nav-item active" style="--i: 2">By Project</a>
                 <a href="name.php" class="nav-item" style="--i: 3">By Name</a>
                 <a href="status.php" class="nav-item" style="--i: 4">By Status</a>
                 <a href="client.php" class="nav-item" style="--i: 5">By Client</a>
 
         </nav>
     </header>
-    <h1>Generate reports based on dates</h1>
+    <h1>Generate reports based on Projects</h1>
     <form id="dateRangeForm" class="container">
-        <label for="startDate">Start Date:</label> <br>
-        <input type="date" id="startDate" autocomplete="off"><br>
-        <label for="endDate">End Date:</label><br>
-        <input type="date" id="endDate" autocomplete="off"><br>
+        <select id="projectFilter" name="project" readonly required>
+            <option value="All">All</option>
+            <option value="Ibile-Hub">Ibile-Hub</option>
+            <option value="RevBill">RevBill</option>
+            <option value="LASEPA">LASEPA</option>
+            <option value="HMS">HMS</option>
+            <option value="Telemedicine-HMS">Telemedicine-HMS</option>
+            <option value="Smaptaal">Smaptaal</option>
+            <option value="RevPay">RevPay</option>
+            <option value="Business-License">Business-License</option>
+            <option value="Bank-Assessment">Bank-Assessment</option>
+            <option value="TechPay-Web">TechPay-Web</option>
+            <option value="HR">HR</option>
+            <option value="LRP">LRP</option>
+            <option value="LRP-Admin">LRP-Admin</option>
+            <option value="TechPay-Mobile">TechPay-Mobile</option>
+            <option value="E-Settlement">E-Settlement</option>
+            <option value="LSSB">LSSB</option>
+            <option value="LASPA">LASPA</option>
+            <option value="LASEMA">LASEMA</option>
+        </select>
 
         <div class="btn">
 
@@ -231,7 +248,7 @@
 
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 
     <script>
         fetch('../admin.php')
@@ -260,25 +277,25 @@
     
 
         function PrintTable() {
-            const startDate = document.getElementById('startDate').value;
-            const endDate = document.getElementById('endDate').value;
-
-            if (!startDate || !endDate) {
-                alert('Please select both start and end dates.');
-                return;
-            }
+            const selectedProject = document.getElementById('projectFilter').value;
 
             const table = document.getElementById('customers');
-            const tableRows = table.querySelectorAll('tbody tr');   
+            const tableRows = table.querySelectorAll('tbody tr');
 
             const filteredRows = Array.from(tableRows).filter(row => {
-                const dateCell = row.querySelector('td:nth-child(6)');
-                const rowDate = dateCell.textContent;
-                return rowDate >= startDate && rowDate <= endDate;
+                const projectCell = row.querySelector('td:nth-child(2)');
+
+                const rowProject = projectCell.textContent;
+      
+
+                const projectMatches = selectedProject === 'All' || rowProject === selectedProject;
+
+
+                return projectMatches;
             });
 
             if (filteredRows.length === 0) {
-                alert('No logs found within the specified date range.');
+                alert('No logs found within the specified criteria.');
                 return;
             }
 
@@ -302,7 +319,7 @@
                     </style>
                 </head>
                 <body>
-                    <h2>Employee Logs from ${startDate} to ${endDate}</h2>
+                    <h2>Employee Logs for ${selectedProject} Project</h2>
                     ${tableToPrint.outerHTML}
                 </body>
                 </html>
@@ -323,21 +340,22 @@
 
 
         function ExportToPDF() {
-            const startDate = document.getElementById('startDate').value;
-            const endDate = document.getElementById('endDate').value;
+            const selectedProject = document.getElementById('projectFilter').value;
 
-            if (!startDate || !endDate) {
-                alert('Please select both start and end dates.');
-                return;
-            }
+
+           
 
             const table = document.getElementById('customers');
             const tableRows = Array.from(table.querySelectorAll('tbody tr'));
 
             const filteredRows = tableRows.filter(row => {
-                const dateCell = row.querySelector('td:nth-child(6)');
-                const rowDate = dateCell.textContent;
-                return rowDate >= startDate && rowDate <= endDate;
+                const projectCell = row.querySelector('td:nth-child(2)');
+                const rowProject = projectCell.textContent;
+               
+                const projectMatches = selectedProject === 'All' || rowProject === selectedProject;
+
+
+                return projectMatches;
             });
 
             if (filteredRows.length === 0) {
@@ -365,7 +383,7 @@
             const docDefinition = {
                 content: [
                     {
-                        text: `Employee Logs from ${startDate} to ${endDate}`,
+                        text: `Employee Logs for ${selectedProject} Project`,
                         alignment: 'center',
                         fontSize: 18,
                         margin: [0, 0, 0, 10] // top, right, bottom, left
@@ -405,21 +423,22 @@
 
 
     function ExportToExcel(type, fn, dl) {
-        const startDate = document.getElementById('startDate').value;
-        const endDate = document.getElementById('endDate').value;
+        const selectedProject = document.getElementById('projectFilter').value;
 
-        if (!startDate || !endDate) {
-            alert('Please select both start and end dates.');
-            return;
-        }
-
+       
         const table = document.getElementById('customers');
         const tableRows = table.querySelectorAll('tbody tr');
 
         const filteredRows = Array.from(tableRows).filter(row => {
-            const dateCell = row.querySelector('td:nth-child(6)');
-            const rowDate = dateCell.textContent;
-            return rowDate >= startDate && rowDate <= endDate;
+            const projectCell = row.querySelector('td:nth-child(2)');
+
+            const rowProject = projectCell.textContent;
+
+
+            const projectMatches = selectedProject === 'All' || rowProject === selectedProject;
+
+
+            return projectMatches;
         });
 
         if (filteredRows.length === 0) {
