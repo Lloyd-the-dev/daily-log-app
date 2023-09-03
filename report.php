@@ -6,9 +6,12 @@
     <title>Generate Report | 2023</title>
     <link rel="stylesheet" href="./css/test.scss">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="./css/dashboard.css">
     <style>
         body{
             font-family: "Poppins", sans-serif;
+            background-image: url("./images/dark-background.jpg");
+            background-size: cover;
         }
         .container {
             margin: 2rem auto;
@@ -161,11 +164,11 @@
     </style>
 </head>
 <body>
-    <div class="head">
+    <!-- <div class="head">
         <a href="./dashboard.php" class="home"><i class='bx bx-arrow-back'></i>Back to home</a>
         <h1>Generate Report</h1>
-    </div>
-    <form id="dateRangeForm" class="container">
+    </div> -->
+    <!-- <form id="dateRangeForm" class="container">
         <label for="startDate">Start Date:</label> <br>
         <input type="date" id="startDate" autocomplete="off"><br>
         <label for="endDate">End Date:</label><br>
@@ -219,14 +222,33 @@
             </select>
 
         <div class="btn">
-        <!-- onclick="ExportToPDF()" -->
+
             <button type="button" onclick="PrintTable()">Print Table</button>
             <button  onclick="ExportToPDF()" type="button">PDF format</button>
             <button id="btnExport" type="button" onclick="ExportToExcel('xlsx', 'EmployeeLogs.xlsx', true)">Excel format</button>
         </div>
         
 
-    </form>
+    </form> -->
+    <header class="header">
+     <a href="./dashboard.php" class="logo">Return</a>
+
+
+      <input type="checkbox" id="check" />
+      <label for="check" class="icons">
+        <i class="bx bx-menu" id="menu-icon"></i>
+        <i class="bx bx-x" id="close-icon"></i>
+      </label>
+
+        <nav class="navbar">
+                <a href="./filters/date.php" style="--i: 1" class="nav-item">By Date</a>
+                <a href="" class="nav-item" style="--i: 2">By Project</a>
+                <a href="" class="nav-item" style="--i: 3">By Name</a>
+                <a href="" class="nav-item" style="--i: 4">By Status</a>
+                <a href="" class="nav-item" style="--i: 5">By Client</a>
+
+        </nav>
+    </header>
 
     <table id="customers">
             <thead>
