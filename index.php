@@ -23,7 +23,7 @@
                 </div>
                 <div class="card-back">
                     <h2>CREATE ACCOUNT</h2>
-                    <form method="POST" action="form.php">
+                    <form method="POST" action="form.php" id="signup">
                         <div class="form-item loginBox">
                             <input type="text" placeholder="Your First Name" required class="input-box" id="createAcc" name="firstName">
                             <input type="text" placeholder="Your Last Name" required class="input-box" id="createAcc" name="lastName">    
@@ -40,9 +40,12 @@
                             <input type="password" placeholder="Your Password" required class="input-box" name="password" id="createAcc">
                             <input type="password" placeholder="Confirm your Password" required class="input-box" name="confirmPassword" id="createAcc">
                         </div>
+                        <div  style="color: red;"></div>
+                       
                         <button type="submit" class="submit-btn" name="submit">Submit</button>
+                        
                     </form>
-                    <button type="button" class="btn" onclick="openLogin()">I have an account</button>
+                    <button type="button" class="btn" onclick="openLogin()" id="sub">I have an account</button>
                 </div>
 
             </div>
@@ -50,5 +53,7 @@
      </div>
      
      <script src="./index.js"></script>
+    
+
 </body>
 </html>

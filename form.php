@@ -13,9 +13,10 @@
 
     }
     if($password != $confPassword){
-      echo '<script type ="text/JavaScript">'; 
-      echo 'alert("Passwords do not match")';
-      echo '</script>';
+        echo '<script type="text/JavaScript">';
+        echo 'alert("Passwords do not match");';
+        echo 'window.location.href = "index.php";';
+        echo '</script>';
     }else{
       $con = mysqli_connect("localhost","root","oreoluwa2003","daily_logging");
 
@@ -25,8 +26,10 @@
 
       if($rs)
       {
-        echo "Contact Records inserted";
-        header("Location: index.html");
+        echo '<script type="text/JavaScript">';
+        echo 'alert("Account Created");';
+        echo 'window.location.href = "index.php";';
+        echo '</script>';
       }
 
       mysqli_close($con);

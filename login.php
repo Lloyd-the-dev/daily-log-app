@@ -21,8 +21,10 @@
         header("Location: dashboard.php"); // Redirect to user dashboard 
     }  
     else{  
-        echo "<h1> Login failed. Invalid username or password.</h1>"; 
-
+        echo '<script type="text/JavaScript">';
+        echo 'alert("Invalid credentials");';
+        echo 'window.location.href = "index.php";'; // Redirect after displaying the alert
+        echo '</script>';
     }     
 
     $con->close();
