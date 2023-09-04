@@ -125,6 +125,11 @@
         .active{
             color: orangered;
         }
+        .generate{
+            margin: 5rem;
+            text-align: center;
+            color: #fff;
+        }
         @media print{
             #customers {
             margin: 200px auto 0 auto;
@@ -168,7 +173,7 @@
 </head>
 <body>
     <header class="header">
-     <a href="../report.php" class="logo">Return</a>
+     <a href="../report.php" class="logo">Generate Report</a>
 
 
       <input type="checkbox" id="check" />
@@ -186,7 +191,7 @@
 
         </nav>
     </header>
-    <h1>Generate reports based on dates</h1>
+    <h1 class="generate">Generate reports based on dates</h1>
     <form id="dateRangeForm" class="container">
         <label for="startDate">Start Date:</label> <br>
         <input type="date" id="startDate" autocomplete="off"><br>

@@ -69,6 +69,11 @@
             color: black;
         }
 
+        .generate{
+            margin: 5rem;
+            text-align: center;
+            color: #fff;
+        }
         #customers td, #customers th {
             border: 1px solid #ddd;
             padding: 8px;
@@ -179,37 +184,32 @@
 
         <nav class="navbar">
                 <a href="date.php" style="--i: 1" class="nav-item">By Date</a>
-                <a href="projects.php" class="nav-item active" style="--i: 2">By Project</a>
+                <a href="projects.php" class="nav-item" style="--i: 2">By Project</a>
                 <a href="name.php" class="nav-item" style="--i: 3">By Name</a>
                 <a href="status.php" class="nav-item" style="--i: 4">By Status</a>
-                <a href="client.php" class="nav-item" style="--i: 5">By Client</a>
+                <a href="client.php" class="nav-item active" style="--i: 5">By Client</a>
 
         </nav>
     </header>
-    <h1>Generate reports based on Projects</h1>
+    <h1 class="generate">Generate reports based on ClientType</h1>
     <form id="dateRangeForm" class="container">
-        <select id="projectFilter" name="project" readonly required>
-            <option value="All">All</option>
-            <option value="Ibile-Hub">Ibile-Hub</option>
+        <select width="500px" id="clientTypeFilter" name="client" readonly required>
+            <option value="">All</option>
+            <option value="Login-Access">Login-Access</option>
+            <option value="LSJ">LSJ</option>
             <option value="RevBill">RevBill</option>
             <option value="LASEPA">LASEPA</option>
-            <option value="HMS">HMS</option>
-            <option value="Telemedicine-HMS">Telemedicine-HMS</option>
-            <option value="Smaptaal">Smaptaal</option>
-            <option value="RevPay">RevPay</option>
-            <option value="Business-License">Business-License</option>
-            <option value="Bank-Assessment">Bank-Assessment</option>
-            <option value="TechPay-Web">TechPay-Web</option>
-            <option value="HR">HR</option>
-            <option value="LRP">LRP</option>
-            <option value="LRP-Admin">LRP-Admin</option>
-            <option value="TechPay-Mobile">TechPay-Mobile</option>
-            <option value="E-Settlement">E-Settlement</option>
-            <option value="LSSB">LSSB</option>
-            <option value="LASPA">LASPA</option>
-            <option value="LASEMA">LASEMA</option>
+            <option value="ACDS">ACDS</option>
+            <option value="3rd-Party">3rd-Party</option>
+            <option value="LIRS">LIRS</option>
+            <option value="Other-Agency">Other-Agency</option>
+            <option value="Bank">Bank</option>
+            <option value="ABC-Helpdesk">ABC-Helpdesk</option>
+            <option value="IBILE">IBILE</option>
+            <option value="CBS">CBS</option>
+            <option value="Tax-Payer">Tax-Payer</option>
+            <option value="ABC-Others">ABC-Others</option>
         </select>
-
         <div class="btn">
 
             <button type="button" onclick="PrintTable()">Print Table</button>
@@ -248,7 +248,7 @@
 
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 
     <script>
         fetch('../admin.php')
@@ -277,21 +277,21 @@
     
 
         function PrintTable() {
-            const selectedProject = document.getElementById('projectFilter').value;
+            const selectedClientType = document.getElementById('clientTypeFilter').value;
 
             const table = document.getElementById('customers');
             const tableRows = table.querySelectorAll('tbody tr');
 
             const filteredRows = Array.from(tableRows).filter(row => {
-                const projectCell = row.querySelector('td:nth-child(2)');
+                const clientTypeCell = row.querySelector('td:nth-child(4)');
 
-                const rowProject = projectCell.textContent;
+                const rowClientType = clientTypeCell.textContent;
       
 
-                const projectMatches = selectedProject === 'All' || rowProject === selectedProject;
+                const clientTypeMatches = selectedClientType === 'All' || rowClientType === selectedClientType;
 
 
-                return projectMatches;
+                return clientTypeMatches;
             });
 
             if (filteredRows.length === 0) {
@@ -319,7 +319,7 @@
                     </style>
                 </head>
                 <body>
-                    <h2>Employee Logs for ${selectedProject} Project</h2>
+                    <h2>Employee Logs for ${selectedClientType} Client</h2>
                     ${tableToPrint.outerHTML}
                 </body>
                 </html>
@@ -340,21 +340,23 @@
 
 
         function ExportToPDF() {
-            const startDate = document.getElementById('startDate').value;
-            const endDate = document.getElementById('endDate').value;
+            const selectedClientType = document.getElementById('clientTypeFilter').value;
 
-            if (!startDate || !endDate) {
-                alert('Please select both start and end dates.');
-                return;
-            }
+           
 
             const table = document.getElementById('customers');
             const tableRows = Array.from(table.querySelectorAll('tbody tr'));
 
             const filteredRows = tableRows.filter(row => {
-                const dateCell = row.querySelector('td:nth-child(6)');
-                const rowDate = dateCell.textContent;
-                return rowDate >= startDate && rowDate <= endDate;
+                const clientTypeCell = row.querySelector('td:nth-child(4)');
+
+                const rowClientType = clientTypeCell.textContent;
+
+
+                const clientTypeMatches = selectedClientType === 'All' || rowClientType === selectedClientType;
+
+
+                return clientTypeMatches;
             });
 
             if (filteredRows.length === 0) {
@@ -382,7 +384,7 @@
             const docDefinition = {
                 content: [
                     {
-                        text: `Employee Logs from ${startDate} to ${endDate}`,
+                        text: `Employee Logs for ${selectedClientType} Client`,
                         alignment: 'center',
                         fontSize: 18,
                         margin: [0, 0, 0, 10] // top, right, bottom, left
@@ -422,21 +424,22 @@
 
 
     function ExportToExcel(type, fn, dl) {
-        const startDate = document.getElementById('startDate').value;
-        const endDate = document.getElementById('endDate').value;
+        const selectedClientType = document.getElementById('clientTypeFilter').value;
 
-        if (!startDate || !endDate) {
-            alert('Please select both start and end dates.');
-            return;
-        }
-
+       
         const table = document.getElementById('customers');
         const tableRows = table.querySelectorAll('tbody tr');
 
         const filteredRows = Array.from(tableRows).filter(row => {
-            const dateCell = row.querySelector('td:nth-child(6)');
-            const rowDate = dateCell.textContent;
-            return rowDate >= startDate && rowDate <= endDate;
+            const clientTypeCell = row.querySelector('td:nth-child(4)');
+
+                const rowClientType = clientTypeCell.textContent;
+      
+
+                const clientTypeMatches = selectedClientType === 'All' || rowClientType === selectedClientType;
+
+
+                return clientTypeMatches;
         });
 
         if (filteredRows.length === 0) {

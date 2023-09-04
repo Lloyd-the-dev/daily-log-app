@@ -69,6 +69,11 @@
             color: black;
         }
 
+        .generate{
+            margin: 5rem;
+            text-align: center;
+            color: #fff;
+        }
         #customers td, #customers th {
             border: 1px solid #ddd;
             padding: 8px;
@@ -186,7 +191,7 @@
 
         </nav>
     </header>
-    <h1>Generate reports based on Projects</h1>
+    <h1 class="generate">Generate reports based on Projects</h1>
     <form id="dateRangeForm" class="container">
         <select id="projectFilter" name="project" readonly required>
             <option value="All">All</option>
