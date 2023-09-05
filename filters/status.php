@@ -334,6 +334,7 @@
             const selectedStatus = document.getElementById('statusFilter').value;
 
 
+
            
 
             const table = document.getElementById('customers');
@@ -376,7 +377,7 @@
             const docDefinition = {
                 content: [
                     {
-                        text: `Employee Logs for Projects with ${selectedProject} Status`,
+                        text: `Employee Logs for Projects with ${selectedStatus} Status`,
                         alignment: 'center',
                         fontSize: 18,
                         margin: [0, 0, 0, 10] // top, right, bottom, left
@@ -384,7 +385,7 @@
                     {
                         table: {
                             headerRows: 1,
-                            widths: ['auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto'],
+                            widths: [50, 40, 40, 70, 30, 60, 20, 20, 20, 30, 60],
                             body: [
                                 ['Date', "Employee's Name", 'Project', 'Activity/Task', 'ClientType', 'Reference/ID', 'Start Time', 'End Time', 'Total Hours', 'Status', 'Remarks'], // Table header
                                 ...tableBodyContent
@@ -393,7 +394,7 @@
                     }
                 ],
                 defaultStyle: {
-                    fontSize: 12
+                    fontSize: 10
                 }
             };
 

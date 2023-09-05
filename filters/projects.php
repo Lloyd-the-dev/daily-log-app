@@ -396,7 +396,7 @@
                     {
                         table: {
                             headerRows: 1,
-                            widths: ['auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto'],
+                            widths: [50, 40, 40, 70, 30, 60, 20, 20, 20, 30, 60],
                             body: [
                                 ['Date', "Employee's Name", 'Project', 'Activity/Task', 'ClientType', 'Reference/ID', 'Start Time', 'End Time', 'Total Hours', 'Status', 'Remarks'], // Table header
                                 ...tableBodyContent
@@ -405,7 +405,7 @@
                     }
                 ],
                 defaultStyle: {
-                    fontSize: 12
+                    fontSize: 10
                 }
             };
 
