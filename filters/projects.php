@@ -193,6 +193,10 @@
     </header>
     <h1 class="generate">Generate reports based on Projects</h1>
     <form id="dateRangeForm" class="container">
+        <label for="startDate">Start Date:</label> <br>
+        <input type="date" id="startDate" autocomplete="off"><br>
+        <label for="endDate">End Date:</label><br>
+        <input type="date" id="endDate" autocomplete="off"><br>
         <select id="projectFilter" name="project" readonly required>
             <option value="All">All</option>
             <option value="Ibile-Hub">Ibile-Hub</option>
@@ -227,22 +231,23 @@
    
 
     <table id="customers">
-            <thead>
-                <tr>
-                    <th>Employee's Name</th>
-                    <th>Project</th>
-                    <th>Activity/Task</th>
-                    <th>ClientType</th>
-                    <th>Reference/ID</th>
-                    <th>Date</th>
-                    <th>Start Time</th>
-                    <th>End Time</th>
-                    <th>Total Hours</th>
-                    <th>Status</th>
-                    <th>Remarks</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
+        <thead>
+            <tr>
+                <th>Employee's Name</th>
+                <th>Project</th>
+                <th>Activity/Task</th>
+                <th>ClientType</th>
+                <th>ClientName</th>
+                <th>Reference/ID</th>
+                <th>Date</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>Total Hours</th>
+                <th>Status</th>
+                <th>ActionTaken</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
     </table>
    
 
@@ -283,20 +288,24 @@
 
         function PrintTable() {
             const selectedProject = document.getElementById('projectFilter').value;
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+
+            if (!startDate || !endDate) {
+                alert('Please select both start and end dates.');
+                return;
+            }
 
             const table = document.getElementById('customers');
             const tableRows = table.querySelectorAll('tbody tr');
 
             const filteredRows = Array.from(tableRows).filter(row => {
                 const projectCell = row.querySelector('td:nth-child(2)');
-
                 const rowProject = projectCell.textContent;
-      
-
+                const dateCell = row.querySelector('td:nth-child(6)');
+                const rowDate = dateCell.textContent;
                 const projectMatches = selectedProject === 'All' || rowProject === selectedProject;
-
-
-                return projectMatches;
+                return projectMatches && rowDate >= startDate && rowDate <= endDate;
             });
 
             if (filteredRows.length === 0) {
@@ -346,9 +355,13 @@
 
         function ExportToPDF() {
             const selectedProject = document.getElementById('projectFilter').value;
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
 
-
-           
+            if (!startDate || !endDate) {
+                alert('Please select both start and end dates.');
+                return;
+            }
 
             const table = document.getElementById('customers');
             const tableRows = Array.from(table.querySelectorAll('tbody tr'));
@@ -356,11 +369,10 @@
             const filteredRows = tableRows.filter(row => {
                 const projectCell = row.querySelector('td:nth-child(2)');
                 const rowProject = projectCell.textContent;
-               
+                const dateCell = row.querySelector('td:nth-child(6)');
+                const rowDate = dateCell.textContent;
                 const projectMatches = selectedProject === 'All' || rowProject === selectedProject;
-
-
-                return projectMatches;
+                return projectMatches && rowDate >= startDate && rowDate <= endDate;
             });
 
             if (filteredRows.length === 0) {
@@ -429,6 +441,13 @@
 
     function ExportToExcel(type, fn, dl) {
         const selectedProject = document.getElementById('projectFilter').value;
+        const startDate = document.getElementById('startDate').value;
+        const endDate = document.getElementById('endDate').value;
+
+        if (!startDate || !endDate) {
+            alert('Please select both start and end dates.');
+            return;
+        }
 
        
         const table = document.getElementById('customers');
@@ -436,14 +455,11 @@
 
         const filteredRows = Array.from(tableRows).filter(row => {
             const projectCell = row.querySelector('td:nth-child(2)');
-
             const rowProject = projectCell.textContent;
-
-
+            const dateCell = row.querySelector('td:nth-child(6)');
+            const rowDate = dateCell.textContent;
             const projectMatches = selectedProject === 'All' || rowProject === selectedProject;
-
-
-            return projectMatches;
+            return projectMatches && rowDate >= startDate && rowDate <= endDate;
         });
 
         if (filteredRows.length === 0) {

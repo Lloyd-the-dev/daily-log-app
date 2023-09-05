@@ -193,6 +193,10 @@
     </header>
     <h1 class="generate">Generate reports based on Project Status</h1>
     <form id="dateRangeForm" class="container">
+        <label for="startDate">Start Date:</label> <br>
+        <input type="date" id="startDate" autocomplete="off"><br>
+        <label for="endDate">End Date:</label><br>
+        <input type="date" id="endDate" autocomplete="off"><br>
         <select id="statusFilter" name="status" required>
             <option value="">All</option>
             <option value="Pending">Pending</option>
@@ -213,22 +217,23 @@
    
 
     <table id="customers">
-            <thead>
-                <tr>
-                    <th>Employee's Name</th>
-                    <th>Project</th>
-                    <th>Activity/Task</th>
-                    <th>ClientType</th>
-                    <th>Reference/ID</th>
-                    <th>Date</th>
-                    <th>Start Time</th>
-                    <th>End Time</th>
-                    <th>Total Hours</th>
-                    <th>Status</th>
-                    <th>Remarks</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
+        <thead>
+            <tr>
+                <th>Employee's Name</th>
+                <th>Project</th>
+                <th>Activity/Task</th>
+                <th>ClientType</th>
+                <th>ClientName</th>
+                <th>Reference/ID</th>
+                <th>Date</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>Total Hours</th>
+                <th>Status</th>
+                <th>ActionTaken</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
     </table>
    
 
@@ -253,13 +258,14 @@
                 newRow.insertCell().textContent = row.project;
                 newRow.insertCell().textContent = row.Activity;
                 newRow.insertCell().textContent = row.ClientType;
+                newRow.insertCell().textContent = row.ClientName;
                 newRow.insertCell().textContent = row.Reference;
                 newRow.insertCell().textContent = row.Date;
                 newRow.insertCell().textContent = row.StartTime;
                 newRow.insertCell().textContent = row.EndTime;
                 newRow.insertCell().textContent = row.TotalHours;
                 newRow.insertCell().textContent = row.Status;
-                newRow.insertCell().textContent = row.Remarks; 
+                newRow.insertCell().textContent = row.ActionTaken; 
 
             });
         })
@@ -269,20 +275,24 @@
 
         function PrintTable() {
             const selectedStatus = document.getElementById('statusFilter').value;
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+
+            if (!startDate || !endDate) {
+                alert('Please select both start and end dates.');
+                return;
+            }
 
             const table = document.getElementById('customers');
             const tableRows = table.querySelectorAll('tbody tr');
 
             const filteredRows = Array.from(tableRows).filter(row => {
                 const statusCell = row.querySelector('td:nth-child(10)');
-
                 const rowStatus = statusCell.textContent;
-      
-
+                const dateCell = row.querySelector('td:nth-child(6)');
+                const rowDate = dateCell.textContent;
                 const statusMatches = selectedStatus === 'All' || rowStatus === selectedStatus;
-
-
-                return statusMatches;
+                return statusMatches && rowDate >= startDate && rowDate <= endDate;
             });
 
             if (filteredRows.length === 0) {
@@ -332,24 +342,24 @@
 
         function ExportToPDF() {
             const selectedStatus = document.getElementById('statusFilter').value;
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
 
-
-
-           
+            if (!startDate || !endDate) {
+                alert('Please select both start and end dates.');
+                return;
+            }
 
             const table = document.getElementById('customers');
             const tableRows = Array.from(table.querySelectorAll('tbody tr'));
 
             const filteredRows = tableRows.filter(row => {
                 const statusCell = row.querySelector('td:nth-child(10)');
-
                 const rowStatus = statusCell.textContent;
-
-
+                const dateCell = row.querySelector('td:nth-child(6)');
+                const rowDate = dateCell.textContent;
                 const statusMatches = selectedStatus === 'All' || rowStatus === selectedStatus;
-
-
-                return statusMatches;
+                return statusMatches && rowDate >= startDate && rowDate <= endDate;
             });
 
             if (filteredRows.length === 0) {
@@ -370,7 +380,8 @@
                     columns[7].textContent, // End Time
                     columns[8].textContent, // Total Hours
                     columns[9].textContent, // Status
-                    columns[10].textContent // Remarks
+                    columns[10].textContent,
+                    columns[11].textContent // Remarks
                 ];
             });
 
@@ -385,9 +396,9 @@
                     {
                         table: {
                             headerRows: 1,
-                            widths: [50, 40, 40, 70, 30, 60, 20, 20, 20, 30, 60],
+                            widths: [50, 40, 40, 70, 30, 30, 60, 20, 20, 20, 30, 60],
                             body: [
-                                ['Date', "Employee's Name", 'Project', 'Activity/Task', 'ClientType', 'Reference/ID', 'Start Time', 'End Time', 'Total Hours', 'Status', 'Remarks'], // Table header
+                                ['Date', "Employee's Name", 'Project', 'Activity/Task', 'ClientType', 'ClientName', 'Reference/ID', 'Start Time', 'End Time', 'Total Hours', 'Status', 'ActionTaken'], // Table header
                                 ...tableBodyContent
                             ]
                         }
@@ -418,21 +429,24 @@
 
     function ExportToExcel(type, fn, dl) {
         const selectedStatus = document.getElementById('statusFilter').value;
+        const startDate = document.getElementById('startDate').value;
+        const endDate = document.getElementById('endDate').value;
 
+        if (!startDate || !endDate) {
+            alert('Please select both start and end dates.');
+            return;
+        }
        
         const table = document.getElementById('customers');
         const tableRows = table.querySelectorAll('tbody tr');
 
         const filteredRows = Array.from(tableRows).filter(row => {
             const statusCell = row.querySelector('td:nth-child(10)');
-
             const rowStatus = statusCell.textContent;
-
-
+            const dateCell = row.querySelector('td:nth-child(6)');
+            const rowDate = dateCell.textContent;
             const statusMatches = selectedStatus === 'All' || rowStatus === selectedStatus;
-
-
-            return statusMatches;
+            return statusMatches && rowDate >= startDate && rowDate <= endDate;
         });
 
         if (filteredRows.length === 0) {
@@ -453,7 +467,7 @@
             data.push(rowData);
         });
 
-        XLSX.utils.sheet_add_aoa(worksheet, [['Employee\'s Name', 'Project', 'Activity/Task', 'ClientType', 'Reference/ID', 'Date', 'Start Time', 'End Time', 'Total Hours', 'Status', 'Remarks']]);
+        XLSX.utils.sheet_add_aoa(worksheet, [['Employee\'s Name', 'Project', 'Activity/Task', 'ClientType', 'ClientName', 'Reference/ID', 'Date', 'Start Time', 'End Time', 'Total Hours', 'Status', 'ActionTaken']]);
         XLSX.utils.sheet_add_aoa(worksheet, data, { origin: 'A2' });
 
         // Add the worksheet to the workbook

@@ -210,23 +210,24 @@
    
 
     <table id="customers">
-            <thead>
-                <tr>
-                    <th>Employee's Name</th>
-                    <th>Project</th>
-                    <th>Activity/Task</th>
-                    <th>ClientType</th>
-                    <th>Reference/ID</th>
-                    <th>Date</th>
-                    <th>Start Time</th>
-                    <th>End Time</th>
-                    <th>Total Hours</th>
-                    <th>Status</th>
-                    <th>Remarks</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-    </table>
+        <thead>
+            <tr>
+                <th>Employee's Name</th>
+                <th>Project</th>
+                <th>Activity/Task</th>
+                <th>ClientType</th>
+                <th>ClientName</th>
+                <th>Reference/ID</th>
+                <th>Date</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>Total Hours</th>
+                <th>Status</th>
+                <th>ActionTaken</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+</table>
    
 
 

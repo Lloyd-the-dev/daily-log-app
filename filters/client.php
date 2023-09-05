@@ -193,6 +193,10 @@
     </header>
     <h1 class="generate">Generate reports based on ClientType</h1>
     <form id="dateRangeForm" class="container">
+        <label for="startDate">Start Date:</label> <br>
+        <input type="date" id="startDate" autocomplete="off"><br>
+        <label for="endDate">End Date:</label><br>
+        <input type="date" id="endDate" autocomplete="off"><br>
         <select width="500px" id="clientTypeFilter" name="client" readonly required>
             <option value="">All</option>
             <option value="Login-Access">Login-Access</option>
@@ -220,25 +224,25 @@
 
     </form> 
    
-
     <table id="customers">
-            <thead>
-                <tr>
-                    <th>Employee's Name</th>
-                    <th>Project</th>
-                    <th>Activity/Task</th>
-                    <th>ClientType</th>
-                    <th>Reference/ID</th>
-                    <th>Date</th>
-                    <th>Start Time</th>
-                    <th>End Time</th>
-                    <th>Total Hours</th>
-                    <th>Status</th>
-                    <th>Remarks</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-    </table>
+        <thead>
+            <tr>
+                <th>Employee's Name</th>
+                <th>Project</th>
+                <th>Activity/Task</th>
+                <th>ClientType</th>
+                <th>ClientName</th>
+                <th>Reference/ID</th>
+                <th>Date</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>Total Hours</th>
+                <th>Status</th>
+                <th>ActionTaken</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+</table>
    
 
 
@@ -278,20 +282,28 @@
 
         function PrintTable() {
             const selectedClientType = document.getElementById('clientTypeFilter').value;
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+
+            if (!startDate || !endDate) {
+                alert('Please select both start and end dates.');
+                return;
+            }
 
             const table = document.getElementById('customers');
             const tableRows = table.querySelectorAll('tbody tr');
 
             const filteredRows = Array.from(tableRows).filter(row => {
                 const clientTypeCell = row.querySelector('td:nth-child(4)');
-
+                const dateCell = row.querySelector('td:nth-child(6)');
+                const rowDate = dateCell.textContent;
                 const rowClientType = clientTypeCell.textContent;
       
 
                 const clientTypeMatches = selectedClientType === 'All' || rowClientType === selectedClientType;
 
 
-                return clientTypeMatches;
+                return clientTypeMatches && rowDate >= startDate && rowDate <= endDate;
             });
 
             if (filteredRows.length === 0) {
@@ -341,7 +353,13 @@
 
         function ExportToPDF() {
             const selectedClientType = document.getElementById('clientTypeFilter').value;
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
 
+            if (!startDate || !endDate) {
+                alert('Please select both start and end dates.');
+                return;
+            }
            
 
             const table = document.getElementById('customers');
@@ -349,14 +367,15 @@
 
             const filteredRows = tableRows.filter(row => {
                 const clientTypeCell = row.querySelector('td:nth-child(4)');
-
+                const dateCell = row.querySelector('td:nth-child(6)');
+                const rowDate = dateCell.textContent;
                 const rowClientType = clientTypeCell.textContent;
-
+      
 
                 const clientTypeMatches = selectedClientType === 'All' || rowClientType === selectedClientType;
 
 
-                return clientTypeMatches;
+                return clientTypeMatches && rowDate >= startDate && rowDate <= endDate;
             });
 
             if (filteredRows.length === 0) {
@@ -425,21 +444,28 @@
 
     function ExportToExcel(type, fn, dl) {
         const selectedClientType = document.getElementById('clientTypeFilter').value;
+        const startDate = document.getElementById('startDate').value;
+        const endDate = document.getElementById('endDate').value;
 
+        if (!startDate || !endDate) {
+            alert('Please select both start and end dates.');
+            return;
+        }
        
         const table = document.getElementById('customers');
         const tableRows = table.querySelectorAll('tbody tr');
 
         const filteredRows = Array.from(tableRows).filter(row => {
             const clientTypeCell = row.querySelector('td:nth-child(4)');
-
+                const dateCell = row.querySelector('td:nth-child(6)');
+                const rowDate = dateCell.textContent;
                 const rowClientType = clientTypeCell.textContent;
       
 
                 const clientTypeMatches = selectedClientType === 'All' || rowClientType === selectedClientType;
 
 
-                return clientTypeMatches;
+                return clientTypeMatches && rowDate >= startDate && rowDate <= endDate;
         });
 
         if (filteredRows.length === 0) {

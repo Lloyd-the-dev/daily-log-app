@@ -3,7 +3,7 @@ include "config.php";
 
 
 
-$sql = "SELECT `project_id`, `project`, `Activity`, `ClientType`, `Reference`, `Date`, `StartTime`, `EndTime`, `TotalHours`, `Status`, `Remarks`, `user_name` FROM project_details"; 
+$sql = "SELECT `project_id`, `project`, `Activity`, `ClientType`, `ClientName`, `Reference`, `Date`, `StartTime`, `EndTime`, `TotalHours`, `Status`, `ActionTaken`, `user_name` FROM project_details"; 
 $result = $conn->query($sql);
 
 $data = array();

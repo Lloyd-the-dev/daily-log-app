@@ -193,6 +193,10 @@
     </header>
     <h1 class="generate">Generate reports based on Names</h1>
     <form id="dateRangeForm" class="container">
+        <label for="startDate">Start Date:</label> <br>
+        <input type="date" id="startDate" autocomplete="off"><br>
+        <label for="endDate">End Date:</label><br>
+        <input type="date" id="endDate" autocomplete="off"><br>
         <input type="text" id="usernameFilter" placeholder="Enter employee's name">
 
         <div class="btn">
@@ -207,23 +211,24 @@
    
 
     <table id="customers">
-            <thead>
-                <tr>
-                    <th>Employee's Name</th>
-                    <th>Project</th>
-                    <th>Activity/Task</th>
-                    <th>ClientType</th>
-                    <th>Reference/ID</th>
-                    <th>Date</th>
-                    <th>Start Time</th>
-                    <th>End Time</th>
-                    <th>Total Hours</th>
-                    <th>Status</th>
-                    <th>Remarks</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-    </table>
+        <thead>
+            <tr>
+                <th>Employee's Name</th>
+                <th>Project</th>
+                <th>Activity/Task</th>
+                <th>ClientType</th>
+                <th>ClientName</th>
+                <th>Reference/ID</th>
+                <th>Date</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>Total Hours</th>
+                <th>Status</th>
+                <th>ActionTaken</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+</table>
    
 
 
@@ -264,19 +269,25 @@
         function PrintTable() {
             const selectedUsername = document.getElementById('usernameFilter').value;
 
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+
+            if (!startDate || !endDate) {
+                alert('Please select both start and end dates.');
+                return;
+            }
             const table = document.getElementById('customers');
             const tableRows = table.querySelectorAll('tbody tr');
 
             const filteredRows = Array.from(tableRows).filter(row => {
                 const usernameCell = row.querySelector('td:nth-child(1)');
-
                 const rowUsername = usernameCell.textContent;
-      
-
+                const dateCell = row.querySelector('td:nth-child(6)');
+                const rowDate = dateCell.textContent;
                 const usernameMatches = !selectedUsername || rowUsername.includes(selectedUsername);
 
 
-                return usernameMatches;
+                return usernameMatches && rowDate >= startDate && rowDate <= endDate;
             });
 
             if (filteredRows.length === 0) {
@@ -326,20 +337,26 @@
 
         function ExportToPDF() {
             const selectedUsername = document.getElementById('usernameFilter').value;
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+
+            if (!startDate || !endDate) {
+                alert('Please select both start and end dates.');
+                return;
+            }
 
             const table = document.getElementById('customers');
             const tableRows = Array.from(table.querySelectorAll('tbody tr'));
 
             const filteredRows = tableRows.filter(row => {
                 const usernameCell = row.querySelector('td:nth-child(1)');
-
                 const rowUsername = usernameCell.textContent;
-
-
+                const dateCell = row.querySelector('td:nth-child(6)');
+                const rowDate = dateCell.textContent;
                 const usernameMatches = !selectedUsername || rowUsername.includes(selectedUsername);
 
 
-                return usernameMatches;
+                return usernameMatches && rowDate >= startDate && rowDate <= endDate;
             });
 
             if (filteredRows.length === 0) {
@@ -408,7 +425,13 @@
 
     function ExportToExcel(type, fn, dl) {
         const selectedUsername = document.getElementById('usernameFilter').value;
+        const startDate = document.getElementById('startDate').value;
+        const endDate = document.getElementById('endDate').value;
 
+        if (!startDate || !endDate) {
+            alert('Please select both start and end dates.');
+            return;
+        }
 
        
         const table = document.getElementById('customers');
@@ -416,14 +439,13 @@
 
         const filteredRows = Array.from(tableRows).filter(row => {
             const usernameCell = row.querySelector('td:nth-child(1)');
+                const rowUsername = usernameCell.textContent;
+                const dateCell = row.querySelector('td:nth-child(6)');
+                const rowDate = dateCell.textContent;
+                const usernameMatches = !selectedUsername || rowUsername.includes(selectedUsername);
 
-            const rowUsername = usernameCell.textContent;
-      
 
-            const usernameMatches = !selectedUsername || rowUsername.includes(selectedUsername);
-
-
-            return usernameMatches;
+                return usernameMatches && rowDate >= startDate && rowDate <= endDate;
         });
 
         if (filteredRows.length === 0) {

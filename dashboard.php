@@ -213,6 +213,9 @@
                     <option value="ABC-Others">ABC-Others</option>
             </select>
 
+            <label for="clientName">Client Name</label>
+            <input type="text" id="clientName" required name="clientName">
+
             <label for="reference">Reference/ID:</label>
             <input type="text" id="reference" required name="reference">
 
@@ -236,8 +239,8 @@
                 <option value="Completed">Completed</option>
             </select>
 
-            <label for="remarks">Remarks:</label>
-            <textarea id="remarks" name="remarks" rows="4" required style="max-width: 360px; max-height: 100px" name="remarks"></textarea>
+            <label for="actionTaken">Action Taken: </label>
+            <textarea id="actionTaken" name="actionTaken" rows="4" required style="max-width: 360px; max-height: 100px" name="actionTaken"></textarea>
             
             <button name="submit" type="submit">Submit</button>
         </form>
@@ -279,19 +282,20 @@
        $project = $_POST["project"];
        $activityTask = $_POST["task"];
        $client = $_POST["client"];
+       $clientName = $_POST["clientName"];
        $reference = $_POST["reference"];
        $date = $_POST["date"];
        $startTime = $_POST["start-time"];
        $endTime = $_POST["end-time"];
        $totalHours = $_POST["total-hours"];
        $status = $_POST["status"];
-       $remarks = $_POST["remarks"];
+       $actionTaken = $_POST["actionTaken"];
        $userName = $_SESSION["name"];
  
 
         $con = mysqli_connect("localhost","root","oreoluwa2003","daily_logging");
 
-        $sql = "INSERT INTO `project_details` (`project_id`, `project`, `Activity`, `ClientType`, `Reference`, `Date`, `StartTime`, `EndTime`, `TotalHours`, `Status`, `Remarks`, `user_name`) VALUES ('0', '$project', '$activityTask', '$client', '$reference', '$date', '$startTime', '$endTime', '$totalHours', '$status', '$remarks', '$userName')";
+        $sql = "INSERT INTO `project_details` (`project_id`, `project`, `Activity`, `ClientType`,`ClientName`, `Reference`, `Date`, `StartTime`, `EndTime`, `TotalHours`, `Status`, `ActionTaken`, `user_name`) VALUES ('0', '$project', '$activityTask', '$client', '$clientName', '$reference', '$date', '$startTime', '$endTime', '$totalHours', '$status', '$actionTaken', '$userName')";
 
         $rs = mysqli_query($con, $sql);
 
