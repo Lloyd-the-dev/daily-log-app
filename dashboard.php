@@ -91,7 +91,64 @@
             margin-top: 20px;
             margin-left: 640px;
         }
-        
+        .navbar{
+            display: flex;
+            align-items: center;
+        }
+        @media (max-width: 678px) {
+            .navbar{
+                flex-direction: column;
+            }
+        }
+        /* Navbar Dropdown */
+        .dropdown {
+        float: left;
+        overflow: hidden;
+        }
+
+        .dropdown .dropbtn {
+        font-size: 17px;    
+        border: none;
+        outline: none;
+        color: white;
+        padding: 14px 16px;
+        background-color: inherit;
+        font-family: inherit;
+        margin: 0;
+        }
+
+        .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+        }
+
+        .dropdown-content a {
+        float: none;
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+        text-align: left;
+        }
+
+        .dropdown:hover .dropbtn {
+        background-color: #555;
+        color: white;
+        }
+
+        .dropdown-content a:hover {
+        background-color: #ddd;
+        color: black;
+        }
+
+        .dropdown:hover .dropdown-content {
+        display: block;
+        }
+
         @media print{
             #customers {
             margin: 200px auto 0 auto;
@@ -150,7 +207,17 @@
 
       <nav class="navbar">
         <?php if ($_SESSION["admin"] == 1) { ?>
-            <a href="adminDashboard.html" style="--i: 0" class="nav-item"><i class='bx bxs-edit-alt'></i> Logs</a>
+            <div class="dropdown" style="--i: 0">
+                <button class="dropbtn">Admin tools</button>
+                <div class="dropdown-content">
+                    <a href="adminDashboard.php">Logs</a>
+                    <a href="#">Clients</a>
+                    <a href="#">Projects</a>
+                    <a href="#">Employees</a>
+                    <a href="#">Status</a>
+                </div>
+            </div> 
+            <!-- <a href=""  class="nav-item"><i class='bx bxs-edit-alt'></i> Admin Functions</a> -->
         <?php } else{ ?>
             <a href="#projects"  style="--i: 0" class="nav-item"><i class='bx bx-laptop'></i> Projects</a>
         <?php } ?>

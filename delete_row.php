@@ -9,7 +9,7 @@ if (isset($_GET["name"]) && isset($_GET["row"])) {
     $deleteQuery = "DELETE FROM project_details WHERE user_name = '$rowName' AND project_id = '$rowId'";
     
     if ($conn->query($deleteQuery) === TRUE) {
-        header("Location: adminDashboard.html");
+        header("Location: adminDashboard.php");
         exit();
     } else {
         echo "Error deleting row: " . $conn->error;

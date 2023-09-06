@@ -252,13 +252,14 @@
                 newRow.insertCell().textContent = row.project;
                 newRow.insertCell().textContent = row.Activity;
                 newRow.insertCell().textContent = row.ClientType;
+                newRow.insertCell().textContent = row.ClientName;
                 newRow.insertCell().textContent = row.Reference;
                 newRow.insertCell().textContent = row.Date;
                 newRow.insertCell().textContent = row.StartTime;
                 newRow.insertCell().textContent = row.EndTime;
                 newRow.insertCell().textContent = row.TotalHours;
                 newRow.insertCell().textContent = row.Status;
-                newRow.insertCell().textContent = row.Remarks; 
+                newRow.insertCell().textContent = row.ActionTaken; 
 
             });
         })
@@ -377,7 +378,8 @@
                     columns[7].textContent, // End Time
                     columns[8].textContent, // Total Hours
                     columns[9].textContent, // Status
-                    columns[10].textContent // Remarks
+                    columns[10].textContent,
+                    columns[11].textContent // Remarks
                 ];
             });
 
@@ -392,9 +394,9 @@
                     {
                         table: {
                             headerRows: 1,
-                            widths: [50, 40, 40, 70, 30, 60, 20, 20, 20, 30, 60],
+                            widths: [50, 40, 40, 70, 30, 30, 60, 20, 20, 20, 30, 60],
                             body: [
-                                ['Date', "Employee's Name", 'Project', 'Activity/Task', 'ClientType', 'Reference/ID', 'Start Time', 'End Time', 'Total Hours', 'Status', 'Remarks'], // Table header
+                                ['Date', "Employee's Name", 'Project', 'Activity/Task', 'ClientType', 'ClientName', 'Reference/ID', 'Start Time', 'End Time', 'Total Hours', 'Status', 'ActionTaken'], // Table header
                                 ...tableBodyContent
                             ]
                         }
@@ -466,7 +468,7 @@
             data.push(rowData);
         });
 
-        XLSX.utils.sheet_add_aoa(worksheet, [['Employee\'s Name', 'Project', 'Activity/Task', 'ClientType', 'Reference/ID', 'Date', 'Start Time', 'End Time', 'Total Hours', 'Status', 'Remarks']]);
+        XLSX.utils.sheet_add_aoa(worksheet, [['Employee\'s Name', 'Project', 'Activity/Task', 'ClientType', 'ClientName', 'Reference/ID', 'Date', 'Start Time', 'End Time', 'Total Hours', 'Status', 'ActionTaken']]);
         XLSX.utils.sheet_add_aoa(worksheet, data, { origin: 'A2' });
 
         // Add the worksheet to the workbook

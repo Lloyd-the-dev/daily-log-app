@@ -1,3 +1,36 @@
+<?php
+include "config.php"; // Include the database connection file
+
+if (isset($_GET["name"]) && isset($_GET["row"])) {
+    $rowName = $_GET["name"];
+    $rowId = $_GET["row"]; 
+
+    // Delete the row from the project_details table
+    $editQuery = "SELECT * FROM project_details WHERE user_name = '$rowName' AND project_id = '$rowId'";
+    $result = $conn->query($editQuery);
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $project = $row['project'];
+        $activity = $row['Activity'];
+        $clientType = $row['ClientType'];
+        $clientName = $row['ClientName'];
+        $reference = $row['Reference'];
+        $date = $row['Date'];
+        $startTime = $row['StartTime'];
+        $endTime = $row['EndTime'];
+        $totalhours = $row['TotalHours'];
+        $status = $row['Status'];
+        $actionTaken = $row['ActionTaken'];
+
+    } else {
+        echo "Employee not found.";
+    }
+
+
+    $conn->close();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -67,6 +100,9 @@
         .home:hover{
             color: purple;
         }
+        .modal{
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -77,22 +113,43 @@
     <table id="customers">
         <thead>
             <tr>
+                <th>Edit</th>
                 <th>Employee's Name</th>
                 <th>Project</th>
                 <th>Activity/Task</th>
                 <th>ClientType</th>
+                <th>ClientName</th>
                 <th>Reference/ID</th>
                 <th>Date</th>
                 <th>Start Time</th>
                 <th>End Time</th>
                 <th>Total Hours</th>
                 <th>Status</th>
-                <th>Remarks</th>
+                <th>ActionTaken</th>
                 <th>Delete</th>
             </tr>
         </thead>
         <tbody></tbody>
     </table>
+    <div id="yourModalId" class="modal">
+        <div class="modal-content">
+            <form action="">
+                <input type="text" value="<?php echo $project; ?>">
+                <input type="text" value="<?php echo $activity; ?>">
+                <input type="text" value="<?php echo $clientType; ?>">
+                <input type="text" value="<?php echo $clientName; ?>">
+                <input type="text" value="<?php echo $reference; ?>">
+                <input type="date" value="<?php echo $date; ?>">
+                <input type="time" value="<?php echo $startTime; ?>">
+                <input type="time" value="<?php echo $endTime; ?>">
+                <input type="text" value="<?php echo $totalhours; ?>">
+                <input type="text" value="<?php echo $status; ?>">
+                <input type="text" value="<?php echo $actionTaken; ?>">
+                <button class="close-button">close</button>
+            </form>
+        </div>
+    </div>
+    
     
     <script src="admin.js"></script>
 </body>
