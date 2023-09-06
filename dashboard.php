@@ -211,7 +211,7 @@
                 <button class="dropbtn">Admin tools</button>
                 <div class="dropdown-content">
                     <a href="adminDashboard.php">Logs</a>
-                    <a href="#">Clients</a>
+                    <a href="./admintools/client.php">Clients</a>
                     <a href="#">Projects</a>
                     <a href="#">Employees</a>
                     <a href="#">Status</a>
@@ -264,7 +264,7 @@
 
             <label for="client" class="client">ClientType</label>
             <select width="500px" id="client" name="client" readonly required>
-                    <option value="Login-Access">Login-Access</option>
+                    <!-- <option value="Login-Access">Login-Access</option>
                     <option value="LSJ">LSJ</option>
                     <option value="RevBill">RevBill</option>
                     <option value="LASEPA">LASEPA</option>
@@ -277,7 +277,7 @@
                     <option value="IBILE">IBILE</option>
                     <option value="CBS">CBS</option>
                     <option value="Tax-Payer">Tax-Payer</option>
-                    <option value="ABC-Others">ABC-Others</option>
+                    <option value="ABC-Others">ABC-Others</option> -->
             </select>
 
             <label for="clientName">Client Name</label>
@@ -339,6 +339,25 @@
         document.body.scrollTop = 0;
         document.documentElement.scrollTop = 0;
         }
+
+        const clientDropdown = document.getElementById('client');
+
+        // Make an AJAX request to fetch client names
+        fetch('./admintools/fetchClient.php')
+            .then(response => response.json())
+            .then(data => {
+                // Clear existing options
+                clientDropdown.innerHTML = '';
+                
+                // Populate dropdown with fetched client names
+                data.forEach(clientName => {
+                    const option = document.createElement('option');
+                    option.value = clientName.Client_type;
+                    option.textContent = clientName.Client_type;
+                    clientDropdown.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error fetching client names:', error));
     </script>
 
 </body>
