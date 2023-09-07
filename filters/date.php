@@ -199,7 +199,7 @@
         <input type="date" id="endDate" autocomplete="off"><br>
 
         <div class="btn">
-
+            <button id="view" onclick="View()" type="button">View</button>
             <button type="button" onclick="PrintTable()">Print Table</button>
             <button  onclick="ExportToPDF()" type="button">PDF format</button>
             <button id="btnExport" type="button" onclick="ExportToExcel('xlsx', 'EmployeeLogs.xlsx', true)">Excel format</button>
@@ -264,7 +264,26 @@
         })
         .catch(error => console.error('Error fetching data:', error));
         
-    
+        function View(){
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            const table = document.getElementById('customers');
+            const tableRows = table.querySelectorAll('tbody tr');
+
+            // Loop through all table rows and hide those that don't match the filter criteria
+            tableRows.forEach(row => {
+                const dateCell = row.querySelector('td:nth-child(7)');
+                const rowDate = dateCell.textContent;
+
+                const dateMatches = (!startDate || !endDate) || (rowDate >= startDate && rowDate <= endDate);
+
+                if (dateMatches) {
+                    row.style.display = ''; // Show row
+                } else {
+                    row.style.display = 'none'; // Hide row
+                }
+            });
+        }
 
         function PrintTable() {
             const startDate = document.getElementById('startDate').value;
@@ -279,7 +298,7 @@
             const tableRows = table.querySelectorAll('tbody tr');   
 
             const filteredRows = Array.from(tableRows).filter(row => {
-                const dateCell = row.querySelector('td:nth-child(6)');
+                const dateCell = row.querySelector('td:nth-child(7)');
                 const rowDate = dateCell.textContent;
                 return rowDate >= startDate && rowDate <= endDate;
             });
@@ -342,7 +361,7 @@
             const tableRows = Array.from(table.querySelectorAll('tbody tr'));
 
             const filteredRows = tableRows.filter(row => {
-                const dateCell = row.querySelector('td:nth-child(6)');
+                const dateCell = row.querySelector('td:nth-child(7)');
                 const rowDate = dateCell.textContent;
                 return rowDate >= startDate && rowDate <= endDate;
             });
@@ -425,7 +444,7 @@
         const tableRows = table.querySelectorAll('tbody tr');
 
         const filteredRows = Array.from(tableRows).filter(row => {
-            const dateCell = row.querySelector('td:nth-child(6)');
+            const dateCell = row.querySelector('td:nth-child(7)');
             const rowDate = dateCell.textContent;
             return rowDate >= startDate && rowDate <= endDate;
         });

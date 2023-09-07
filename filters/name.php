@@ -199,8 +199,8 @@
         <input type="date" id="endDate" autocomplete="off"><br>
         <input type="text" id="usernameFilter" placeholder="Enter employee's name">
 
-        <div class="btn">
-
+        <div class="btn"> 
+            <button id="view" onclick="View()" type="button">View</button>
             <button type="button" onclick="PrintTable()">Print Table</button>
             <button  onclick="ExportToPDF()" type="button">PDF format</button>
             <button id="btnExport" type="button" onclick="ExportToExcel('xlsx', 'EmployeeLogs.xlsx', true)">Excel format</button>
@@ -265,7 +265,30 @@
         })
         .catch(error => console.error('Error fetching data:', error));
         
-    
+        function View(){
+            const selectedUsername = document.getElementById('usernameFilter').value;
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            const table = document.getElementById('customers');
+            const tableRows = table.querySelectorAll('tbody tr');
+
+            // Loop through all table rows and hide those that don't match the filter criteria
+            tableRows.forEach(row => {
+                const usernameCell = row.querySelector('td:nth-child(1)');
+                const dateCell = row.querySelector('td:nth-child(7)');
+                const rowDate = dateCell.textContent;
+                const rowUsername = usernameCell.textContent;
+
+                const usernameMatches = !selectedUsername || rowUsername.includes(selectedUsername);
+                const dateMatches = (!startDate || !endDate) || (rowDate >= startDate && rowDate <= endDate);
+
+                if (usernameMatches && dateMatches) {
+                    row.style.display = ''; // Show row
+                } else {
+                    row.style.display = 'none'; // Hide row
+                }
+            });
+        }
 
         function PrintTable() {
             const selectedUsername = document.getElementById('usernameFilter').value;
@@ -283,7 +306,7 @@
             const filteredRows = Array.from(tableRows).filter(row => {
                 const usernameCell = row.querySelector('td:nth-child(1)');
                 const rowUsername = usernameCell.textContent;
-                const dateCell = row.querySelector('td:nth-child(6)');
+                const dateCell = row.querySelector('td:nth-child(7)');
                 const rowDate = dateCell.textContent;
                 const usernameMatches = !selectedUsername || rowUsername.includes(selectedUsername);
 
@@ -352,7 +375,7 @@
             const filteredRows = tableRows.filter(row => {
                 const usernameCell = row.querySelector('td:nth-child(1)');
                 const rowUsername = usernameCell.textContent;
-                const dateCell = row.querySelector('td:nth-child(6)');
+                const dateCell = row.querySelector('td:nth-child(7)');
                 const rowDate = dateCell.textContent;
                 const usernameMatches = !selectedUsername || rowUsername.includes(selectedUsername);
 
@@ -442,7 +465,7 @@
         const filteredRows = Array.from(tableRows).filter(row => {
             const usernameCell = row.querySelector('td:nth-child(1)');
                 const rowUsername = usernameCell.textContent;
-                const dateCell = row.querySelector('td:nth-child(6)');
+                const dateCell = row.querySelector('td:nth-child(7)');
                 const rowDate = dateCell.textContent;
                 const usernameMatches = !selectedUsername || rowUsername.includes(selectedUsername);
 

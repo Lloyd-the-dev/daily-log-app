@@ -22,7 +22,7 @@
     }  
     else{  
         echo '<script type="text/JavaScript">';
-        echo 'alert("Invalid credentials");';
+        echo 'alert("Invalid credentials, Contact an admin");';
         echo 'window.location.href = "index.php";'; // Redirect after displaying the alert
         echo '</script>';
     }     

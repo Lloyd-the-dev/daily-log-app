@@ -198,15 +198,10 @@
         <label for="endDate">End Date:</label><br>
         <input type="date" id="endDate" autocomplete="off"><br>
         <select id="statusFilter" name="status" required>
-            <option value="">All</option>
-            <option value="Pending">Pending</option>
-            <option value="Work in Progress">Work in Progress</option>
-            <option value="Resolved">Resolved</option>
-            <option value="Completed">Completed</option>
         </select>
 
         <div class="btn">
-
+            <button id="view" onclick="View()" type="button">View</button>
             <button type="button" onclick="PrintTable()">Print Table</button>
             <button  onclick="ExportToPDF()" type="button">PDF format</button>
             <button id="btnExport" type="button" onclick="ExportToExcel('xlsx', 'EmployeeLogs.xlsx', true)">Excel format</button>
@@ -271,7 +266,50 @@
         })
         .catch(error => console.error('Error fetching data:', error));
         
-    
+        function View(){
+            const selectedStatus = document.getElementById('statusFilter').value;
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            const table = document.getElementById('customers');
+            const tableRows = table.querySelectorAll('tbody tr');
+
+            // Loop through all table rows and hide those that don't match the filter criteria
+            tableRows.forEach(row => {
+                const statusCell = row.querySelector('td:nth-child(11)');
+                const rowStatus = statusCell.textContent;
+                const dateCell = row.querySelector('td:nth-child(7)');
+                const rowDate = dateCell.textContent;
+                
+                const statusMatches = selectedStatus === 'All' || rowStatus === selectedStatus;
+                const dateMatches = (!startDate || !endDate) || (rowDate >= startDate && rowDate <= endDate);
+
+                if (statusMatches && dateMatches) {
+                    row.style.display = ''; // Show row
+                } else {
+                    row.style.display = 'none'; // Hide row
+                }
+            });
+        }
+        
+        //Populate the Status Dropdown
+        const statusDropdown = document.getElementById('statusFilter');
+
+        // Make an AJAX request to fetch client names
+        fetch('../admintools/fetchStatus.php')
+            .then(response => response.json())
+            .then(data => {
+                // Clear existing options
+                statusDropdown.innerHTML = '';
+                
+                // Populate dropdown with fetched client names
+                data.forEach(status => {
+                    const option = document.createElement('option');
+                    option.value = status.status;
+                    option.textContent = status.status;
+                    statusDropdown.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error fetching Status:', error));
 
         function PrintTable() {
             const selectedStatus = document.getElementById('statusFilter').value;
@@ -287,9 +325,9 @@
             const tableRows = table.querySelectorAll('tbody tr');
 
             const filteredRows = Array.from(tableRows).filter(row => {
-                const statusCell = row.querySelector('td:nth-child(10)');
+                const statusCell = row.querySelector('td:nth-child(11)');
                 const rowStatus = statusCell.textContent;
-                const dateCell = row.querySelector('td:nth-child(6)');
+                const dateCell = row.querySelector('td:nth-child(7)');
                 const rowDate = dateCell.textContent;
                 const statusMatches = selectedStatus === 'All' || rowStatus === selectedStatus;
                 return statusMatches && rowDate >= startDate && rowDate <= endDate;
@@ -354,9 +392,9 @@
             const tableRows = Array.from(table.querySelectorAll('tbody tr'));
 
             const filteredRows = tableRows.filter(row => {
-                const statusCell = row.querySelector('td:nth-child(10)');
+                const statusCell = row.querySelector('td:nth-child(11)');
                 const rowStatus = statusCell.textContent;
-                const dateCell = row.querySelector('td:nth-child(6)');
+                const dateCell = row.querySelector('td:nth-child(7)');
                 const rowDate = dateCell.textContent;
                 const statusMatches = selectedStatus === 'All' || rowStatus === selectedStatus;
                 return statusMatches && rowDate >= startDate && rowDate <= endDate;
@@ -441,9 +479,9 @@
         const tableRows = table.querySelectorAll('tbody tr');
 
         const filteredRows = Array.from(tableRows).filter(row => {
-            const statusCell = row.querySelector('td:nth-child(10)');
+            const statusCell = row.querySelector('td:nth-child(11)');
             const rowStatus = statusCell.textContent;
-            const dateCell = row.querySelector('td:nth-child(6)');
+            const dateCell = row.querySelector('td:nth-child(7)');
             const rowDate = dateCell.textContent;
             const statusMatches = selectedStatus === 'All' || rowStatus === selectedStatus;
             return statusMatches && rowDate >= startDate && rowDate <= endDate;

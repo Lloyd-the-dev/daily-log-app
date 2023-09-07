@@ -1,11 +1,7 @@
-// Code for rotating effect of login and Signup page
-const card = document.getElementById("card");
 function openRegister(){
-    card.style.transform = "rotateY(-180deg)";
+    alert("Contact an admin to Onboard you")
 }
-function openLogin(){
-    card.style.transform = "rotateY(0deg)";
-}
+
 
 // Get references to the start time, end time, and remarks input elements
 // Get references to the start time, end time, and remarks input elements

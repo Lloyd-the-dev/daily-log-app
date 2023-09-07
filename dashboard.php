@@ -19,6 +19,7 @@
 
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     
+    
     <style id="table_style" type="text/css">
         body {
             min-height: 100vh;
@@ -148,45 +149,8 @@
         .dropdown:hover .dropdown-content {
         display: block;
         }
-
-        @media print{
-            #customers {
-            margin: 200px auto 0 auto;
-            font-family: Arial, Helvetica, sans-serif;
-            border-collapse: collapse;
-            width: 80%;
-            color: black;
-            }
-
-            #customers td, #customers th {
-                border: 1px solid #ddd;
-                padding: 8px;
-            }
-    
-            #customers tr{
-                background-color: white;
-            }
-            #customers tr:hover {
-                background-color: #ddd;
-            }
-
-            #customers th {
-                padding-top: 12px;
-                padding-bottom: 12px;
-                text-align: left;
-                background-color: dodgerblue;
-                color: white;
-            }
-            #customers a{
-                color: black;
-                text-decoration: none;
-                text-transform: capitalize;
-
-            }
-            #customers i{
-                color: red;
-                cursor: pointer;
-            }
+        .modal{
+                display: none;
         }
     </style>
    
@@ -213,7 +177,7 @@
                     <a href="adminDashboard.php">Logs</a>
                     <a href="./admintools/client.php">Clients</a>
                     <a href="./admintools/project.php">Projects</a>
-                    <a href="#">Employees</a>
+                    <a href="./admintools/users.php">Employees</a>
                     <a href="./admintools/status.php">Status</a>
                 </div>
             </div> 
@@ -234,7 +198,7 @@
 
  
     <section id="projects">
-        <form action="dashboard.php" class="container" method="POST">
+        <form action="dashboard.php" class="container" method="POST" onsubmit="openModal()">
             <h2 class="project-heading">What Project Did you work on Today?</h2>
 
             <label for="project">Projects</label>
@@ -242,7 +206,7 @@
             </select>
 
             <label for="message">Activity/Task</label>
-            <textarea id="message" rows="4" class="activity" style="max-width: 360px; max-height: 100px" name="task" required></textarea>
+            <textarea id="message" rows="4" class="activity" style="max-width: 360px; max-height: 100px" name="task"></textarea>
 
             <label for="client" class="client">ClientType</label>
             <select width="500px" id="client" name="client" readonly required>
@@ -250,31 +214,37 @@
             </select>
 
             <label for="clientName">Client Name</label>
-            <input type="text" id="clientName" required name="clientName">
+            <input type="text" id="clientName" name="clientName">
 
             <label for="reference">Reference/ID:</label>
-            <input type="text" id="reference" required name="reference">
+            <input type="text" id="reference" name="reference">
 
             <label for="date">Date:</label>
-            <input type="date" id="date" name="date" required>
+            <input type="date" id="date" name="date">
 
             <label for="start-time">Start Time:</label>
-            <input type="time" id="start-time" name="start-time" required>
+            <input type="time" id="start-time" name="start-time">
 
             <label for="end-time">End Time:</label>
-            <input type="time" id="end-time" name="end-time" required>
+            <input type="time" id="end-time" name="end-time">
 
             <p>Total Hours Spent: <span id="total-hours-display">0</span> hours</p>
             <input type="hidden" id="total-hours" name="total-hours" value="0">
 
             <label for="status">Status</label>
-            <select id="status" name="status" required>
+            <select id="status" name="status">
             </select>
 
             <label for="actionTaken">Action Taken: </label>
-            <textarea id="actionTaken" name="actionTaken" rows="4" required style="max-width: 360px; max-height: 100px" name="actionTaken"></textarea>
-            
-            <button name="submit" type="submit">Submit</button>
+            <textarea id="actionTaken" name="actionTaken" rows="4" style="max-width: 360px; max-height: 100px" name="actionTaken"></textarea>
+
+            <button id="primary" onclick="window.dialog.showModal();" type="button">Submit</button>
+            <dialog id="dialog">
+                <h2>Are you sure you want to submit?</h2>
+                <p style="color: red">this action can't be reversed</p>
+                <button onclick="window.dialog.close();" aria-label="close" class="x" type="button">❌</button>
+                <button name="submit" type="submit">Submit</button>
+            </dialog>
         </form>
     </section>
     
@@ -285,6 +255,8 @@
 
     <script src="index.js"></script>
     <script>
+    
+       
         // Get the button
         let mybutton = document.getElementById("myBtn");
 
@@ -353,7 +325,7 @@
             .then(response => response.json())
             .then(data => {
                 // Clear existing options
-                clientDropdown.innerHTML = '';
+                statusDropdown.innerHTML = '';
                 
                 // Populate dropdown with fetched client names
                 data.forEach(status => {

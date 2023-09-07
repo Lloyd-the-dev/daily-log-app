@@ -198,29 +198,11 @@
         <label for="endDate">End Date:</label><br>
         <input type="date" id="endDate" autocomplete="off"><br>
         <select id="projectFilter" name="project" readonly required>
-            <option value="All">All</option>
-            <option value="Ibile-Hub">Ibile-Hub</option>
-            <option value="RevBill">RevBill</option>
-            <option value="LASEPA">LASEPA</option>
-            <option value="HMS">HMS</option>
-            <option value="Telemedicine-HMS">Telemedicine-HMS</option>
-            <option value="Smaptaal">Smaptaal</option>
-            <option value="RevPay">RevPay</option>
-            <option value="Business-License">Business-License</option>
-            <option value="Bank-Assessment">Bank-Assessment</option>
-            <option value="TechPay-Web">TechPay-Web</option>
-            <option value="HR">HR</option>
-            <option value="LRP">LRP</option>
-            <option value="LRP-Admin">LRP-Admin</option>
-            <option value="TechPay-Mobile">TechPay-Mobile</option>
-            <option value="E-Settlement">E-Settlement</option>
-            <option value="LSSB">LSSB</option>
-            <option value="LASPA">LASPA</option>
-            <option value="LASEMA">LASEMA</option>
+           
         </select>
 
         <div class="btn">
-
+            <button id="view" onclick="View()" type="button">View</button>
             <button type="button" onclick="PrintTable()">Print Table</button>
             <button  onclick="ExportToPDF()" type="button">PDF format</button>
             <button id="btnExport" type="button" onclick="ExportToExcel('xlsx', 'EmployeeLogs.xlsx', true)">Excel format</button>
@@ -285,7 +267,51 @@
         })
         .catch(error => console.error('Error fetching data:', error));
         
+        function View(){
+            const selectedProject = document.getElementById('projectFilter').value;
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            const table = document.getElementById('customers');
+            const tableRows = table.querySelectorAll('tbody tr');
+
+            // Loop through all table rows and hide those that don't match the filter criteria
+            tableRows.forEach(row => {
+                const projectCell = row.querySelector('td:nth-child(2)');
+                const rowProject = projectCell.textContent;
+                const dateCell = row.querySelector('td:nth-child(7)');
+                const rowDate = dateCell.textContent;
+
+                const projectMatches = selectedProject === 'All' || rowProject === selectedProject;
+                const dateMatches = (!startDate || !endDate) || (rowDate >= startDate && rowDate <= endDate);
+
+                if (projectMatches && dateMatches) {
+                    row.style.display = ''; // Show row
+                } else {
+                    row.style.display = 'none'; // Hide row
+                }
+            });
+        }
     
+        //Populate the Projects Dropdown
+        const projectDropdown = document.getElementById('projectFilter');
+
+        // Make an AJAX request to fetch projects names
+        fetch('../admintools/fetchProject.php')
+            .then(response => response.json())
+            .then(data => {
+                // Clear existing options
+                projectDropdown.innerHTML = '';
+                
+                // Populate dropdown with fetched projects names
+                data.forEach(projectName => {
+                    const option = document.createElement('option');
+                    option.value = projectName.project_name;
+                    option.textContent = projectName.project_name;
+                    projectDropdown.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error fetching Project names:', error));
+        
 
         function PrintTable() {
             const selectedProject = document.getElementById('projectFilter').value;
@@ -303,7 +329,7 @@
             const filteredRows = Array.from(tableRows).filter(row => {
                 const projectCell = row.querySelector('td:nth-child(2)');
                 const rowProject = projectCell.textContent;
-                const dateCell = row.querySelector('td:nth-child(6)');
+                const dateCell = row.querySelector('td:nth-child(7)');
                 const rowDate = dateCell.textContent;
                 const projectMatches = selectedProject === 'All' || rowProject === selectedProject;
                 return projectMatches && rowDate >= startDate && rowDate <= endDate;
@@ -370,7 +396,7 @@
             const filteredRows = tableRows.filter(row => {
                 const projectCell = row.querySelector('td:nth-child(2)');
                 const rowProject = projectCell.textContent;
-                const dateCell = row.querySelector('td:nth-child(6)');
+                const dateCell = row.querySelector('td:nth-child(7)');
                 const rowDate = dateCell.textContent;
                 const projectMatches = selectedProject === 'All' || rowProject === selectedProject;
                 return projectMatches && rowDate >= startDate && rowDate <= endDate;
@@ -458,7 +484,7 @@
         const filteredRows = Array.from(tableRows).filter(row => {
             const projectCell = row.querySelector('td:nth-child(2)');
             const rowProject = projectCell.textContent;
-            const dateCell = row.querySelector('td:nth-child(6)');
+            const dateCell = row.querySelector('td:nth-child(7)');
             const rowDate = dateCell.textContent;
             const projectMatches = selectedProject === 'All' || rowProject === selectedProject;
             return projectMatches && rowDate >= startDate && rowDate <= endDate;

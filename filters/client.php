@@ -198,24 +198,10 @@
         <label for="endDate">End Date:</label><br>
         <input type="date" id="endDate" autocomplete="off"><br>
         <select width="500px" id="clientTypeFilter" name="client" readonly required>
-            <option value="">All</option>
-            <option value="Login-Access">Login-Access</option>
-            <option value="LSJ">LSJ</option>
-            <option value="RevBill">RevBill</option>
-            <option value="LASEPA">LASEPA</option>
-            <option value="ACDS">ACDS</option>
-            <option value="3rd-Party">3rd-Party</option>
-            <option value="LIRS">LIRS</option>
-            <option value="Other-Agency">Other-Agency</option>
-            <option value="Bank">Bank</option>
-            <option value="ABC-Helpdesk">ABC-Helpdesk</option>
-            <option value="IBILE">IBILE</option>
-            <option value="CBS">CBS</option>
-            <option value="Tax-Payer">Tax-Payer</option>
-            <option value="ABC-Others">ABC-Others</option>
+            
         </select>
         <div class="btn">
-            <button id="view" onclick="view()">View</button>
+            <button id="view" onclick="View()" type="button">View</button>
             <button type="button" onclick="PrintTable()">Print Table</button>
             <button  onclick="ExportToPDF()" type="button">PDF format</button>
             <button id="btnExport" type="button" onclick="ExportToExcel('xlsx', 'EmployeeLogs.xlsx', true)">Excel format</button>
@@ -255,6 +241,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 
     <script>
+    
         fetch('../admin.php')
         .then(response => response.json())
         .then(data => {
@@ -278,7 +265,51 @@
             });
         })
         .catch(error => console.error('Error fetching data:', error));
-        
+
+        function View(){
+            const selectedClientType = document.getElementById('clientTypeFilter').value;
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            const table = document.getElementById('customers');
+            const tableRows = table.querySelectorAll('tbody tr');
+
+            // Loop through all table rows and hide those that don't match the filter criteria
+            tableRows.forEach(row => {
+                const clientTypeCell = row.querySelector('td:nth-child(4)');
+                const dateCell = row.querySelector('td:nth-child(7)');
+                const rowDate = dateCell.textContent;
+                const rowClientType = clientTypeCell.textContent;
+
+                const clientTypeMatches = selectedClientType === 'All' || rowClientType === selectedClientType;
+                const dateMatches = (!startDate || !endDate) || (rowDate >= startDate && rowDate <= endDate);
+
+                if (clientTypeMatches && dateMatches) {
+                    row.style.display = ''; // Show row
+                } else {
+                    row.style.display = 'none'; // Hide row
+                }
+            });
+        }
+         //Populate the Client Dropdown
+         const clientDropdown = document.getElementById('clientTypeFilter');
+
+        // Make an AJAX request to fetch client names
+        fetch('../admintools/fetchClient.php')
+            .then(response => response.json())
+            .then(data => {
+                // Clear existing options
+                clientDropdown.innerHTML = '';
+                
+                // Populate dropdown with fetched client names
+                data.forEach(clientName => {
+                    const option = document.createElement('option');
+                    option.value = clientName.Client_type;
+                    option.textContent = clientName.Client_type;
+                    clientDropdown.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error fetching client names:', error));
+
     
 
         function PrintTable() {
@@ -296,7 +327,7 @@
 
             const filteredRows = Array.from(tableRows).filter(row => {
                 const clientTypeCell = row.querySelector('td:nth-child(4)');
-                const dateCell = row.querySelector('td:nth-child(6)');
+                const dateCell = row.querySelector('td:nth-child(7)');
                 const rowDate = dateCell.textContent;
                 const rowClientType = clientTypeCell.textContent;
       
@@ -368,7 +399,7 @@
 
             const filteredRows = tableRows.filter(row => {
                 const clientTypeCell = row.querySelector('td:nth-child(4)');
-                const dateCell = row.querySelector('td:nth-child(6)');
+                const dateCell = row.querySelector('td:nth-child(7)');
                 const rowDate = dateCell.textContent;
                 const rowClientType = clientTypeCell.textContent;
       
@@ -459,7 +490,7 @@
 
         const filteredRows = Array.from(tableRows).filter(row => {
             const clientTypeCell = row.querySelector('td:nth-child(4)');
-                const dateCell = row.querySelector('td:nth-child(6)');
+                const dateCell = row.querySelector('td:nth-child(7)');
                 const rowDate = dateCell.textContent;
                 const rowClientType = clientTypeCell.textContent;
       

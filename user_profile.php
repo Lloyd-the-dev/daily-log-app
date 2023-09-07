@@ -16,9 +16,9 @@ if ($result->num_rows > 0) {
     $employeeLastname = $row['Lastname'];
     $employeeFullname = $row['Firstname']. " " . $row['Lastname'];
     $employeeEmail = $row['Email'];
+    $employeePassword = $row['Password'];
     $employeePhone = $row['Phonenumber'];
     $employeeAddress = $row['Address'];
-    $employeeCountry = $row['Country'];
 
 } else {
     echo "Employee not found.";
@@ -41,7 +41,7 @@ if ($result->num_rows > 0) {
     <div class="container rounded bg-white mt-5">
         <div class="row">
             <div class="col-md-4 border-right">
-                <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5" src="./images/user-profile.webp" width="90"><span class="font-weight-bold"><?php echo $employeeFirstname; ?></span><span class="text-black-50"><?php echo $employeeEmail; ?></span><span><?php echo $employeeCountry; ?></span></div>
+                <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5" src="./images/user-profile.webp" width="90"><span class="font-weight-bold"><?php echo $employeeFirstname; ?></span><span class="text-black-50"><?php echo $employeeEmail; ?></span><span><?php echo $employeeAddress; ?></span></div>
             </div>
             <div class="col-md-8">
                 <div class="p-3 py-5">
@@ -63,7 +63,7 @@ if ($result->num_rows > 0) {
                         </div>
                         <div class="row mt-3">
                                 <div class="col-md-6"><input type="text" class="form-control" placeholder="address" value="<?php echo $employeeAddress; ?>" name="address"></div>
-                                <div class="col-md-6"><input type="text" class="form-control" value="<?php echo $employeeCountry; ?>" placeholder="Country" name="country"></div>
+                                <div class="col-md-6"><input type="text" class="form-control" value="<?php echo $employeePassword; ?>" placeholder="Password" name="Password"></div>
                         </div>
                         </div>
                         <div class="mt-5 text-right"><button class="btn btn-primary profile-button" type="submit" name="submit">Save Profile</button></div>
@@ -83,12 +83,12 @@ if ($result->num_rows > 0) {
         $newFirstname = $_POST["first_name"];
         $newLastname = $_POST["last_name"];
         $newEmail = $_POST["email"];
+        $newPassword = $_POST["Password"];
         $newPhone = $_POST["phone_number"];
         $newAddress = $_POST["address"];
-        $newCountry = $_POST["country"];
         $userId = $_SESSION["user_id"];
 
-        $updateQuery = "UPDATE user_details SET Firstname = '$newFirstname', Lastname = '$newLastname', Email = '$newEmail', Phonenumber = '$newPhone', Address = '$newAddress', Country = '$newCountry' WHERE user_id = '$userId'";
+        $updateQuery = "UPDATE user_details SET Firstname = '$newFirstname', Lastname = '$newLastname', Email = '$newEmail', Phonenumber = '$newPhone', Address = '$newAddress', Password = '$newPassword' WHERE user_id = '$userId'";
 
         if ($conn->query($updateQuery) === TRUE) {
             echo '<script type ="text/JavaScript">'; 
