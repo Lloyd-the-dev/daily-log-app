@@ -212,9 +212,9 @@
                 <div class="dropdown-content">
                     <a href="adminDashboard.php">Logs</a>
                     <a href="./admintools/client.php">Clients</a>
-                    <a href="#">Projects</a>
+                    <a href="./admintools/project.php">Projects</a>
                     <a href="#">Employees</a>
-                    <a href="#">Status</a>
+                    <a href="./admintools/status.php">Status</a>
                 </div>
             </div> 
             <!-- <a href=""  class="nav-item"><i class='bx bxs-edit-alt'></i> Admin Functions</a> -->
@@ -239,24 +239,6 @@
 
             <label for="project">Projects</label>
             <select id="project" name="project" readonly required>
-                    <option value="Ibile-Hub">Ibile-Hub</option>
-                    <option value="RevBill">RevBill</option>
-                    <option value="LASEPA">LASEPA</option>
-                    <option value="HMS">HMS</option>
-                    <option value="Telemedicine-HMS">Telemedicine-HMS</option>
-                    <option value="Smaptaal">Smaptaal</option>
-                    <option value="RevPay">RevPay</option>
-                    <option value="Business-License">Business-License</option>
-                    <option value="Bank-Assessment">Bank-Assessment</option>
-                    <option value="TechPay-Web">TechPay-Web</option>
-                    <option value="HR">HR</option>
-                    <option value="LRP">LRP</option>
-                    <option value="LRP-Admin">LRP-Admin</option>
-                    <option value="TechPay-Mobile">TechPay-Mobile</option>
-                    <option value="E-Settlement">E-Settlement</option>
-                    <option value="LSSB">LSSB</option>
-                    <option value="LASPA">LASPA</option>
-                    <option value="LASEMA">LASEMA</option>
             </select>
 
             <label for="message">Activity/Task</label>
@@ -264,20 +246,7 @@
 
             <label for="client" class="client">ClientType</label>
             <select width="500px" id="client" name="client" readonly required>
-                    <!-- <option value="Login-Access">Login-Access</option>
-                    <option value="LSJ">LSJ</option>
-                    <option value="RevBill">RevBill</option>
-                    <option value="LASEPA">LASEPA</option>
-                    <option value="ACDS">ACDS</option>
-                    <option value="3rd-Party">3rd-Party</option>
-                    <option value="LIRS">LIRS</option>
-                    <option value="Other-Agency">Other-Agency</option>
-                    <option value="Bank">Bank</option>
-                    <option value="ABC-Helpdesk">ABC-Helpdesk</option>
-                    <option value="IBILE">IBILE</option>
-                    <option value="CBS">CBS</option>
-                    <option value="Tax-Payer">Tax-Payer</option>
-                    <option value="ABC-Others">ABC-Others</option> -->
+                    
             </select>
 
             <label for="clientName">Client Name</label>
@@ -300,10 +269,6 @@
 
             <label for="status">Status</label>
             <select id="status" name="status" required>
-                <option value="Pending">Pending</option>
-                <option value="Work in Progress">Work in Progress</option>
-                <option value="Resolved">Resolved</option>
-                <option value="Completed">Completed</option>
             </select>
 
             <label for="actionTaken">Action Taken: </label>
@@ -340,6 +305,27 @@
         document.documentElement.scrollTop = 0;
         }
 
+        //Populate the Projects Dropdown
+        const projectDropdown = document.getElementById('project');
+
+        // Make an AJAX request to fetch projects names
+        fetch('./admintools/fetchProject.php')
+            .then(response => response.json())
+            .then(data => {
+                // Clear existing options
+                projectDropdown.innerHTML = '';
+                
+                // Populate dropdown with fetched projects names
+                data.forEach(projectName => {
+                    const option = document.createElement('option');
+                    option.value = projectName.project_name;
+                    option.textContent = projectName.project_name;
+                    projectDropdown.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error fetching Project names:', error));
+        
+        //Populate the Client Dropdown
         const clientDropdown = document.getElementById('client');
 
         // Make an AJAX request to fetch client names
@@ -358,6 +344,26 @@
                 });
             })
             .catch(error => console.error('Error fetching client names:', error));
+
+        //Populate the Status Dropdown
+        const statusDropdown = document.getElementById('status');
+
+        // Make an AJAX request to fetch client names
+        fetch('./admintools/fetchStatus.php')
+            .then(response => response.json())
+            .then(data => {
+                // Clear existing options
+                clientDropdown.innerHTML = '';
+                
+                // Populate dropdown with fetched client names
+                data.forEach(status => {
+                    const option = document.createElement('option');
+                    option.value = status.status;
+                    option.textContent = status.status;
+                    statusDropdown.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error fetching Status:', error));
     </script>
 
 </body>

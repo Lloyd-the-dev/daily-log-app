@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clients</title>
+    <title>Projects</title>
     <link rel="stylesheet" href="../css/dashboard.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
@@ -48,9 +48,6 @@
             background-color: dodgerblue;
             color: white;
         }
-        .container{
-            margin: 3rem;
-        }
         a{
             color: black;
             text-decoration: none;
@@ -74,51 +71,50 @@
         .home:hover{
             color: purple;
         }
+        .container{
+            margin: 3rem;
+        }
     </style>
 </head>
 <body>
     <div class="head">
         <a href="../dashboard.php" class="home"><i class='bx bx-arrow-back'></i>Back to home</a>
-        <h1>Our Clients</h1>
+        <h1>The Projects</h1>
     </div>
     <table id="client">
             <thead>
                 <tr>
-                    <th>Client Name</th>
-                    <th>Client Type</th>
+                    <th>Project</th>
                     <th>Delete</th>
                 </tr>
             </thead>
             <tbody></tbody>
     </table>
-    <form action="client.php" class="container" method="POST">
-        <h1>Add Client</h1>
-        <label for="">Client Name</label>
-        <input type="text" name="clientName">
-        <label for="">Client Type</label>
-        <input type="text" name="clientType">
+    <form action="project.php" class="container" method="POST">
+        <h1>Add Project</h1>
+        <label for="">Project</label>
+        <input type="text" name="project">
         <button name="submit" type="submit">Add</button>
     </form>
 
-        <script src="fetchClient.js"></script>
+        <script src="fetchProject.js"></script>
 </body>
 </html>
 
 <?php
     include "../config.php";
-    if (!empty($_POST["clientType"])){
-        $clientName = $_POST["clientName"];
-        $clientType = $_POST["clientType"];
+    if (!empty($_POST["project"])){
+        $project = $_POST["project"];
 
  
-         $sql = "INSERT INTO `clients` (`client_id`, `client_name`, `Client_type`) VALUES ('0', '$clientName', '$clientType')";
+         $sql = "INSERT INTO `projects` (`project_id`, `project_name`) VALUES ('0', '$project')";
  
          $rs = mysqli_query($conn, $sql);
  
          if($rs)
          {
              echo '<script type ="text/JavaScript">'; 
-             echo 'alert("Client successfully added!")';
+             echo 'alert("Project successfully added!")';
              echo '</script>';  
          }
  
