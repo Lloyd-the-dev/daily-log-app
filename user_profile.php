@@ -3,7 +3,6 @@ include "config.php"; // Include the database connection file
 
 session_start();
 // Get the employee ID from the query parameter
-$employeeName = $_SESSION["name"];
 $employeeId = $_SESSION["user_id"];
 
 // Fetch employee details from the database based on the ID
@@ -63,7 +62,7 @@ if ($result->num_rows > 0) {
                         </div>
                         <div class="row mt-3">
                                 <div class="col-md-6"><input type="text" class="form-control" placeholder="address" value="<?php echo $employeeAddress; ?>" name="address"></div>
-                                <div class="col-md-6"><input type="text" class="form-control" value="<?php echo $employeePassword; ?>" placeholder="Password" name="Password"></div>
+                                <div class="col-md-6"><input type="password" id="passwordField" class="form-control" value="<?php echo $employeePassword; ?>" placeholder="Password" name="Password"><button id="togglePassword" type="button">Show</button></div>
                         </div>
                         </div>
                         <div class="mt-5 text-right"><button class="btn btn-primary profile-button" type="submit" name="submit">Save Profile</button></div>
@@ -73,12 +72,29 @@ if ($result->num_rows > 0) {
             </div>
         </div>
     </div>
+    <script>
+        const passwordField = document.getElementById('passwordField');
+        const togglePassword = document.getElementById('togglePassword');
+
+        togglePassword.addEventListener('click', () => {
+        if (passwordField.type === 'password') {
+            passwordField.type = 'text';
+            togglePassword.textContent = 'Hide';
+        } else {
+            passwordField.type = 'password';
+            togglePassword.textContent = 'Show';
+        }
+        });
+
+    </script>
 </body>
 </html>
 <?php 
     include "config.php";
     // session_start();
 
+
+    // Get the employee ID from the query parameter
     if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $newFirstname = $_POST["first_name"];
         $newLastname = $_POST["last_name"];
@@ -88,8 +104,9 @@ if ($result->num_rows > 0) {
         $newAddress = $_POST["address"];
         $userId = $_SESSION["user_id"];
 
-        $updateQuery = "UPDATE user_details SET Firstname = '$newFirstname', Lastname = '$newLastname', Email = '$newEmail', Phonenumber = '$newPhone', Address = '$newAddress', Password = '$newPassword' WHERE user_id = '$userId'";
-
+        $updateQuery = "UPDATE user_details SET Firstname = '$newFirstname', Lastname = '$newLastname', Email = '$newEmail', Phonenumber = '$newPhone', Address = '$newAddress', Password = '$newPassword', first_login = '0' WHERE user_id = '$userId'";
+        
+        
         if ($conn->query($updateQuery) === TRUE) {
             echo '<script type ="text/JavaScript">'; 
             echo 'alert("Profile Updated successfully!")';

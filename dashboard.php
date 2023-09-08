@@ -1,9 +1,20 @@
 <?php
+        include "config.php";
         session_start();
         if (!isset($_SESSION["user_id"])) {
             header("Location: login.html");
             exit();
         }
+        $employeeId = $_SESSION["user_id"];
+        $sql = "SELECT * FROM user_details WHERE user_id = '$employeeId'";
+        $result = $conn->query($sql);
+    
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            $name = $row['Firstname'];
+            
+        }
+
 
 ?>
 
@@ -190,7 +201,7 @@
             <a href="logout.php" class="nav-item" style="--i: 3"><i class='bx bx-log-out'></i> Logout</a>
       </nav>
     </header>
-    <h1 class="welcome-message">Welcome, <?php echo $_SESSION["name"]; ?>
+    <h1 class="welcome-message">Welcome, <?php echo $name; ?>
      <?php 
             $message = ($_SESSION["admin"] == 1) ? "(admin)" : "";
             echo $message; 
@@ -238,7 +249,7 @@
             <label for="actionTaken">Action Taken: </label>
             <textarea id="actionTaken" name="actionTaken" rows="4" style="max-width: 360px; max-height: 100px" name="actionTaken"></textarea>
 
-            <button id="primary" onclick="window.dialog.showModal();" type="button">Submit</button>
+            <button onclick="window.dialog.showModal();" type="button">Submit</button>
             <dialog id="dialog">
                 <h2>Are you sure you want to submit?</h2>
                 <p style="color: red">this action can't be reversed</p>
@@ -354,7 +365,7 @@
        $totalHours = $_POST["total-hours"];
        $status = $_POST["status"];
        $actionTaken = $_POST["actionTaken"];
-       $userName = $_SESSION["name"];
+       $userName = $name;
  
 
         $con = mysqli_connect("localhost","root","oreoluwa2003","daily_logging");

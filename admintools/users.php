@@ -115,7 +115,7 @@
         $email = $_POST["email"];
 
  
-        $sql = "INSERT INTO `user_details` (`user_id`, `Firstname`,`Lastname`, `Email`, `Password`,`Phonenumber`,`Address`, `is_admin`) VALUES ('0', '','', '$email', '' , '' , '' ,  '0')";
+        $sql = "INSERT INTO `user_details` (`user_id`, `Firstname`,`Lastname`, `Email`, `Password`,`Phonenumber`,`Address`, `is_admin`, `first_login`) VALUES ('0', '','', '$email', '' , '' , '' ,  '0', '1')";
 
          $rs = mysqli_query($conn, $sql);
  
