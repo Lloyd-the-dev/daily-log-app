@@ -193,7 +193,7 @@
                 </div>
             </div> 
             <!-- <a href=""  class="nav-item"><i class='bx bxs-edit-alt'></i> Admin Functions</a> -->
-        <?php } else{ ?>
+        <?php } else if($_SESSION["passiveAdmin"] != 1){ ?>
             <a href="#projects"  style="--i: 0" class="nav-item"><i class='bx bx-laptop'></i> Projects</a>
         <?php } ?>
             <a href="report.php" style="--i: 1" class="nav-item"><i class='bx bxs-report'></i> Report</a>
@@ -208,58 +208,60 @@
         ?></h1>
 
  
-    <section id="projects">
-        <form action="dashboard.php" class="container" method="POST" onsubmit="openModal()">
-            <h2 class="project-heading">What Project Did you work on Today?</h2>
+    <?php 
+        if($_SESSION["passiveAdmin"] != 1){
+    ?>
+        <section id="projects">
+            <form action="dashboard.php" class="container" method="POST" onsubmit="openModal()">
+                <h2 class="project-heading">What Project Did you work on Today?</h2>
 
-            <label for="project">Projects</label>
-            <select id="project" name="project" readonly required>
-            </select>
+                <label for="project">Projects</label>
+                <select id="project" name="project" readonly required>
+                </select>
 
-            <label for="message">Activity/Task</label>
-            <textarea id="message" rows="4" class="activity" style="max-width: 360px; max-height: 100px" name="task"></textarea>
+                <label for="message">Activity/Task</label>
+                <textarea id="message" rows="4" class="activity" style="max-width: 360px; max-height: 100px" name="task"></textarea>
 
-            <label for="client" class="client">ClientType</label>
-            <select width="500px" id="client" name="client" readonly required>
-                    
-            </select>
+                <label for="client" class="client">ClientType</label>
+                <select width="500px" id="client" name="client" readonly required>
+                        
+                </select>
 
-            <label for="clientName">Client Name</label>
-            <input type="text" id="clientName" name="clientName">
+                <label for="clientName">Client Name</label>
+                <input type="text" id="clientName" name="clientName">
 
-            <label for="reference">Reference/ID:</label>
-            <input type="text" id="reference" name="reference">
+                <label for="reference">Reference/ID:</label>
+                <input type="text" id="reference" name="reference">
 
-            <label for="date">Date:</label>
-            <input type="date" id="date" name="date">
+                <label for="date">Date:</label>
+                <input type="date" id="date" name="date">
 
-            <label for="start-time">Start Time:</label>
-            <input type="time" id="start-time" name="start-time">
+                <label for="start-time">Start Time:</label>
+                <input type="time" id="start-time" name="start-time">
 
-            <label for="end-time">End Time:</label>
-            <input type="time" id="end-time" name="end-time">
+                <label for="end-time">End Time:</label>
+                <input type="time" id="end-time" name="end-time">
 
-            <p>Total Hours Spent: <span id="total-hours-display">0</span> hours</p>
-            <input type="hidden" id="total-hours" name="total-hours" value="0">
+                <p>Total Hours Spent: <span id="total-hours-display">0</span> hours</p>
+                <input type="hidden" id="total-hours" name="total-hours" value="0">
 
-            <label for="status">Status</label>
-            <select id="status" name="status">
-            </select>
+                <label for="status">Status</label>
+                <select id="status" name="status">
+                </select>
 
-            <label for="actionTaken">Action Taken: </label>
-            <textarea id="actionTaken" name="actionTaken" rows="4" style="max-width: 360px; max-height: 100px" name="actionTaken"></textarea>
+                <label for="actionTaken">Action Taken: </label>
+                <textarea id="actionTaken" name="actionTaken" rows="4" style="max-width: 360px; max-height: 100px" name="actionTaken"></textarea>
 
-            <button onclick="window.dialog.showModal();" type="button">Submit</button>
-            <dialog id="dialog">
-                <h2>Are you sure you want to submit?</h2>
-                <p style="color: red">this action can't be reversed</p>
-                <button onclick="window.dialog.close();" aria-label="close" class="x" type="button">❌</button>
-                <button name="submit" type="submit">Submit</button>
-            </dialog>
-        </form>
-    </section>
-    
-    
+                <button onclick="window.dialog.showModal();" type="button">Submit</button>
+                <dialog id="dialog">
+                    <h2>Are you sure you want to submit?</h2>
+                    <p style="color: red">this action can't be reversed</p>
+                    <button onclick="window.dialog.close();" aria-label="close" class="cancel-btn" type="button">Return</button>
+                    <button name="submit" type="submit">Submit</button>
+                </dialog>
+            </form>
+        </section>
+       <?php } ?>
    
 
   
@@ -365,7 +367,7 @@
        $totalHours = $_POST["total-hours"];
        $status = $_POST["status"];
        $actionTaken = $_POST["actionTaken"];
-       $userName = $name;
+       $userName =  $name;
  
 
         $con = mysqli_connect("localhost","root","oreoluwa2003","daily_logging");

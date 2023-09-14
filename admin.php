@@ -3,7 +3,7 @@ include "config.php";
 
 session_start();
 $name =  $_SESSION["name"];
-if ($_SESSION["admin"] == 1) {
+if ($_SESSION["admin"] == 1 || $_SESSION["passiveAdmin"] == 1) {
     $sql = "SELECT `project_id`, `project`, `Activity`, `ClientType`, `ClientName`, `Reference`, `Date`, `StartTime`, `EndTime`, `TotalHours`, `Status`, `ActionTaken`, `user_name` FROM project_details"; 
 } else{
     $sql = "SELECT `project_id`, `project`, `Activity`, `ClientType`, `ClientName`, `Reference`, `Date`, `StartTime`, `EndTime`, `TotalHours`, `Status`, `ActionTaken`, `user_name` FROM project_details WHERE `user_name` = '$name'"; 

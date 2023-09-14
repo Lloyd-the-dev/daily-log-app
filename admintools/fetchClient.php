@@ -3,7 +3,7 @@ include "../config.php";
 
 
 
-$sql = "SELECT `client_id`, `client_name`, `Client_type` FROM clients"; 
+$sql = "SELECT `client_id`, `Client_type` FROM clients"; 
 $result = $conn->query($sql);
 
 $data = array();

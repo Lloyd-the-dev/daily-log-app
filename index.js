@@ -1,6 +1,3 @@
-function openRegister(){
-    alert("Contact an admin to Onboard you")
-}
 
 
 // Get references to the start time, end time, and remarks input elements

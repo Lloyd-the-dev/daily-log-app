@@ -7,14 +7,8 @@ fetch('admin.php')
                 const newRow = tableBody.insertRow();
 
                 newRow.insertCell().innerHTML = '<td><a href="edit_row.php?name=' + row.user_name + '&row='+ row.project_id + '"><i class="bx bx-edit-alt" ></i></a></td>';
-                const nameCell = newRow.insertCell();
-                const nameLink = document.createElement('a');
-                nameLink.textContent = row.user_name;
-                nameLink.href = `employee_profile.php?name= ${row.user_name}`; // Pass employee ID as query parameter
-                nameCell.appendChild(nameLink);
-
-                // edit icon <i class='bx bx-edit-alt'></i>
-
+                
+                newRow.insertCell().textContent = row.user_name;
                 newRow.insertCell().textContent = row.project;
                 newRow.insertCell().textContent = row.Activity;
                 newRow.insertCell().textContent = row.ClientType;

@@ -19,7 +19,6 @@
                         <input type="password" placeholder="Your Password" class="input-box loginBox" name="password" id="createAcc" style="display: block">
                         <button type="submit" class="submit-btn" name="submit">Submit</button>
                     </form>
-                    <button type="button" class="btn" onclick="openRegister()">I'm new here</button>    
                 </div>
 
             </div>

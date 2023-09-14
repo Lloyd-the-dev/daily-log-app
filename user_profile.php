@@ -4,6 +4,7 @@ include "config.php"; // Include the database connection file
 session_start();
 // Get the employee ID from the query parameter
 $employeeId = $_SESSION["user_id"];
+$passiveAdmin = $_SESSION["passiveAdmin"];
 
 // Fetch employee details from the database based on the ID
 $sql = "SELECT * FROM user_details WHERE user_id = '$employeeId'";
@@ -104,7 +105,7 @@ if ($result->num_rows > 0) {
         $newAddress = $_POST["address"];
         $userId = $_SESSION["user_id"];
 
-        $updateQuery = "UPDATE user_details SET Firstname = '$newFirstname', Lastname = '$newLastname', Email = '$newEmail', Phonenumber = '$newPhone', Address = '$newAddress', Password = '$newPassword', first_login = '0' WHERE user_id = '$userId'";
+        $updateQuery = "UPDATE user_details SET Firstname = '$newFirstname', Lastname = '$newLastname', Email = '$newEmail', Phonenumber = '$newPhone', Address = '$newAddress', Password = '$newPassword', first_login = '0', passiveAdmin = '$passiveAdmin' WHERE user_id = '$userId'";
         
         
         if ($conn->query($updateQuery) === TRUE) {

@@ -102,10 +102,39 @@
         <h1 class="onboard">Onboard Users</h1>
         <label for="">Email</label>
         <input type="email" name="email">
+        <select name="accountType" id="">
+            <option value="user">User</option>
+            <option value="admin">Admin</option>
+            <option value="passive">PassiveAdmin</option>
+        </select>
         <button name="submit" type="submit">Onboard</button>
     </form>
 
-        <script src="fetchUsers.js"></script>
+        <script>
+            
+            fetch('fetchUsers.php')
+                    .then(response => response.json())
+                    .then(data => {
+                        const tableBody = document.querySelector('#client tbody');
+                
+                        data.forEach(row => {
+                            const newRow = tableBody.insertRow();
+                            const passive = row.passiveAdmin
+                            const adminRole = row.is_admin
+                            const message = (adminRole == 1) ? "(admin)" : ""
+                            const message2 = (passive == 1) ? "(passive)" : ""
+                            newRow.insertCell().innerHTML = row.Firstname;
+                            newRow.insertCell().textContent = row.Lastname; 
+                            newRow.insertCell().innerHTML = row.Email + ' <b>' + message + '</b>'+ '<b>' + message2 + '</b>'; 
+                            newRow.insertCell().textContent = row.Password; 
+                            newRow.insertCell().textContent = row.Phonenumber; 
+                            newRow.insertCell().textContent = row.Address; 
+                            newRow.insertCell().innerHTML = '<td><a href="delete_user.php?id=' + row.user_id + '"><i class="bx bx-trash" ></i></a></td>';
+
+                        });
+                    })
+                .catch(error => console.error('Error fetching data:', error));
+        </script>
 </body>
 </html>
 
@@ -113,9 +142,18 @@
     include "../config.php";
     if (!empty($_POST["email"])){
         $email = $_POST["email"];
+        $accType = $_POST["accountType"];
+        //Normal users
+        if($accType == "user"){
+            $sql = "INSERT INTO `user_details` (`user_id`, `Firstname`,`Lastname`, `Email`, `Password`,`Phonenumber`,`Address`, `is_admin`, `first_login`, `passiveAdmin`) VALUES ('0', '','', '$email', '' , '' , '' ,  '0', '1', '0')";
+        } else if($accType == "admin"){
+            $sql = "INSERT INTO `user_details` (`user_id`, `Firstname`,`Lastname`, `Email`, `Password`,`Phonenumber`,`Address`, `is_admin`, `first_login`, `passiveAdmin`) VALUES ('0', '','', '$email', '' , '' , '' ,  '1', '1', '0')";
+        }else{
+            $sql = "INSERT INTO `user_details` (`user_id`, `Firstname`,`Lastname`, `Email`, `Password`,`Phonenumber`,`Address`, `is_admin`, `first_login`, `passiveAdmin`) VALUES ('0', '','', '$email', '' , '' , '' ,  '0', '1', '1')";
+        }
+        
 
- 
-        $sql = "INSERT INTO `user_details` (`user_id`, `Firstname`,`Lastname`, `Email`, `Password`,`Phonenumber`,`Address`, `is_admin`, `first_login`) VALUES ('0', '','', '$email', '' , '' , '' ,  '0', '1')";
+
 
          $rs = mysqli_query($conn, $sql);
  

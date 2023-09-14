@@ -84,7 +84,6 @@
     <table id="client">
             <thead>
                 <tr>
-                    <th>Client Name</th>
                     <th>Client Type</th>
                     <th>Delete</th>
                 </tr>
@@ -93,8 +92,6 @@
     </table>
     <form action="client.php" class="container" method="POST">
         <h1>Add Client</h1>
-        <label for="">Client Name</label>
-        <input type="text" name="clientName">
         <label for="">Client Type</label>
         <input type="text" name="clientType">
         <button name="submit" type="submit">Add</button>
@@ -107,11 +104,10 @@
 <?php
     include "../config.php";
     if (!empty($_POST["clientType"])){
-        $clientName = $_POST["clientName"];
         $clientType = $_POST["clientType"];
 
  
-         $sql = "INSERT INTO `clients` (`client_id`, `client_name`, `Client_type`) VALUES ('0', '$clientName', '$clientType')";
+         $sql = "INSERT INTO `clients` (`client_id`, `Client_type`) VALUES ('0', '$clientType')";
  
          $rs = mysqli_query($conn, $sql);
  
