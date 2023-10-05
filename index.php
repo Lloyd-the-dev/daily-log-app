@@ -17,7 +17,7 @@
                     <form method="POST" action="login.php">
                         <input type="email" placeholder="Your email" required class="input-box loginBox" name="email" id="createAcc" style="display: block">
                         <input type="password" placeholder="Your Password" class="input-box loginBox" name="password" id="createAcc" style="display: block">
-                        <button type="submit" class="submit-btn" name="submit">Submit</button>
+                        <button type="submit" class="submit-btn" name="submit">Login</button>
                     </form>
                 </div>
 

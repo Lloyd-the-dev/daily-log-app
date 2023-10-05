@@ -266,7 +266,8 @@
         .catch(error => console.error('Error fetching data:', error));
         
         function View(){
-            const selectedUsername = document.getElementById('usernameFilter').value;
+            const user = document.getElementById('usernameFilter').value;
+            const selectedUsername = user.toLowerCase();
             const startDate = document.getElementById('startDate').value;
             const endDate = document.getElementById('endDate').value;
             const table = document.getElementById('customers');
@@ -277,7 +278,8 @@
                 const usernameCell = row.querySelector('td:nth-child(1)');
                 const dateCell = row.querySelector('td:nth-child(7)');
                 const rowDate = dateCell.textContent;
-                const rowUsername = usernameCell.textContent;
+                const rowUser = usernameCell.textContent;
+                const rowUsername = rowUser.toLowerCase();
 
                 const usernameMatches = !selectedUsername || rowUsername.includes(selectedUsername);
                 const dateMatches = (!startDate || !endDate) || (rowDate >= startDate && rowDate <= endDate);
@@ -291,8 +293,8 @@
         }
 
         function PrintTable() {
-            const selectedUsername = document.getElementById('usernameFilter').value;
-
+            const user = document.getElementById('usernameFilter').value;
+            const selectedUsername = user.toLowerCase();
             const startDate = document.getElementById('startDate').value;
             const endDate = document.getElementById('endDate').value;
 
@@ -305,7 +307,8 @@
 
             const filteredRows = Array.from(tableRows).filter(row => {
                 const usernameCell = row.querySelector('td:nth-child(1)');
-                const rowUsername = usernameCell.textContent;
+                const rowUser = usernameCell.textContent;
+                const rowUsername = rowUser.toLowerCase();
                 const dateCell = row.querySelector('td:nth-child(7)');
                 const rowDate = dateCell.textContent;
                 const usernameMatches = !selectedUsername || rowUsername.includes(selectedUsername);
@@ -360,7 +363,8 @@
 
 
         function ExportToPDF() {
-            const selectedUsername = document.getElementById('usernameFilter').value;
+            const user = document.getElementById('usernameFilter').value;
+            const selectedUsername = user.toLowerCase();
             const startDate = document.getElementById('startDate').value;
             const endDate = document.getElementById('endDate').value;
 
@@ -374,7 +378,9 @@
 
             const filteredRows = tableRows.filter(row => {
                 const usernameCell = row.querySelector('td:nth-child(1)');
-                const rowUsername = usernameCell.textContent;
+                const rowUser = usernameCell.textContent;
+                const rowUsername = rowUser.toLowerCase();
+
                 const dateCell = row.querySelector('td:nth-child(7)');
                 const rowDate = dateCell.textContent;
                 const usernameMatches = !selectedUsername || rowUsername.includes(selectedUsername);
@@ -449,7 +455,8 @@
 
 
     function ExportToExcel(type, fn, dl) {
-        const selectedUsername = document.getElementById('usernameFilter').value;
+        const user = document.getElementById('usernameFilter').value;
+        const selectedUsername = user.toLowerCase();        
         const startDate = document.getElementById('startDate').value;
         const endDate = document.getElementById('endDate').value;
 
@@ -463,8 +470,10 @@
         const tableRows = table.querySelectorAll('tbody tr');
 
         const filteredRows = Array.from(tableRows).filter(row => {
-            const usernameCell = row.querySelector('td:nth-child(1)');
-                const rowUsername = usernameCell.textContent;
+                const usernameCell = row.querySelector('td:nth-child(1)');
+                const rowUser = usernameCell.textContent;
+                const rowUsername = rowUser.toLowerCase();
+
                 const dateCell = row.querySelector('td:nth-child(7)');
                 const rowDate = dateCell.textContent;
                 const usernameMatches = !selectedUsername || rowUsername.includes(selectedUsername);
